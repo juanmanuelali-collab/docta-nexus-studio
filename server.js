@@ -32,7 +32,6 @@ function parseMeta(md) {
   const get = (re) => { const m = md.match(re); return m ? m[1].trim() : null; };
   return {
     name:         get(/\*\*Nombre\*\*:\s*(.+)/)         || 'Cliente',
-    rubro:        get(/\*\*Rubro\*\*:\s*(.+)/)           || '',
     colorPrimary: get(/Principal:\s*(#[0-9A-Fa-f]{6})/) || '#c8f135',
     colorAccent:  get(/Acento:\s*(#[0-9A-Fa-f]{6})/)    || '#888888',
     colorBtnText: get(/Texto sobre botones:\s*(#[0-9A-Fa-f]{6})/) || '#ffffff',
@@ -40,7 +39,10 @@ function parseMeta(md) {
 }
 
 app.use(express.json({ limit: '30mb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+
+const publicPath = path.join(__dirname, 'public');
+console.log('STATIC PATH:', publicPath);
+app.use(express.static(publicPath));
 
 app.get('/api/client/:slug', (req, res) => {
   const md = loadClient(req.params.slug);
@@ -55,70 +57,19 @@ app.get('/api/clients', (req, res) => {
 async function runAgent({ slug, imageBase64, imageMediaType, logoBase64, logoMediaType, ctas, userPrompt, network }) {
   const md = loadClient(slug);
   if (!md) throw new Error(`Cliente "${slug}" no encontrado.`);
-
   const networkLabels = {
     instagram: 'Instagram Feed (1:1)', instagram_stories: 'Instagram Stories (9:16)',
     linkedin: 'LinkedIn (16:9)', facebook: 'Facebook (4:5)'
   };
-
-  const system = `${md}
-
----
-
-## Tu rol como agente de dirección de arte
-
-Sos el agente visual de esta marca. Las instrucciones anteriores son tu identidad y criterio estético.
-
-### REGLA ABSOLUTA 1 — La foto NO se modifica jamás
-Generás ÚNICAMENTE el fondo/ambiente. La foto original se superpone intacta en el browser.
-
-### REGLA ABSOLUTA 2 — Los CTAs son INMUTABLES
-Los textos de CTAs se usan EXACTAMENTE como el usuario los escribió. Nunca los cambiés.
-Solo decidís el estilo visual del botón (color, forma, posición) usando la paleta de la marca.
-
-### Cómo construir el prompt de fondo
-- Describí SOLO el fondo/ambiente, sin personas ni texto
-- Coherente con la paleta y mood de la marca
-- Dejá espacio compositivo para la foto del sujeto
-- Incluí siempre: "background only, no people, no text, no watermarks, studio quality, 4K"
-
-Respondé ÚNICAMENTE con este JSON válido (sin markdown, sin backticks):
-{
-  "analysis": {
-    "subject": "qué hay en la foto",
-    "style": "estilo fotográfico",
-    "colors": "paleta detectada",
-    "mood": "tono emocional",
-    "lighting": "tipo de iluminación"
-  },
-  "background_prompt": "prompt completo en inglés para el fondo",
-  "negative_prompt": "no people, no faces, no text, no watermarks, blur, low quality",
-  "cta_style": {
-    "style": "minimal|bold|elegant|playful",
-    "position": "bottom|top|bottom-right|overlay",
-    "color_primary": "#hex de la paleta de la marca",
-    "color_text": "#hex para el texto del botón",
-    "shape": "pill|rectangle|banner"
-  },
-  "logo_position": "top-left|top-right|bottom-left|bottom-right",
-  "composition_note": "cómo componer la foto sobre el fondo"
-}`;
-
-  const msg = `Descripción del usuario: ${userPrompt || 'No especificada'}
-CTAs EXACTOS (inmutables): ${ctas.join(' | ')}
-Red social: ${networkLabels[network] || 'Instagram Feed'}
-Logo incluido: ${logoBase64 ? 'Sí' : 'No'}`;
-
-  const content = [
-    { type: 'image', source: { type: 'base64', media_type: imageMediaType, data: imageBase64 } }
-  ];
+  const system = `${md}\n\n---\n\n## Tu rol como agente de dirección de arte\n\nSos el agente visual de esta marca. Las instrucciones anteriores son tu identidad y criterio estético.\n\n### REGLA ABSOLUTA 1 — La foto NO se modifica jamás\nGenerás ÚNICAMENTE el fondo/ambiente. La foto original se superpone intacta en el browser.\n\n### REGLA ABSOLUTA 2 — Los CTAs son INMUTABLES\nLos textos de CTAs se usan EXACTAMENTE como el usuario los escribió.\n\nRespondé ÚNICAMENTE con este JSON válido (sin markdown, sin backticks):\n{\n  "analysis": {\n    "subject": "qué hay en la foto",\n    "style": "estilo fotográfico",\n    "colors": "paleta detectada",\n    "mood": "tono emocional",\n    "lighting": "tipo de iluminación"\n  },\n  "background_prompt": "prompt completo en inglés para el fondo. Incluir: background only, no people, no text, no watermarks, studio quality, 4K",\n  "negative_prompt": "no people, no faces, no text, no watermarks, blur, low quality",\n  "cta_style": {\n    "style": "minimal|bold|elegant|playful",\n    "position": "bottom|top|bottom-right|overlay",\n    "color_primary": "#hex de la paleta de la marca",\n    "color_text": "#hex para el texto del botón",\n    "shape": "pill|rectangle|banner"\n  },\n  "logo_position": "top-left|top-right|bottom-left|bottom-right",\n  "composition_note": "cómo componer la foto sobre el fondo"\n}`;
+  const msg = `Descripción del usuario: ${userPrompt || 'No especificada'}\nCTAs EXACTOS (inmutables): ${ctas.join(' | ')}\nRed social: ${networkLabels[network] || 'Instagram Feed'}\nLogo incluido: ${logoBase64 ? 'Sí' : 'No'}`;
+  const content = [{ type: 'image', source: { type: 'base64', media_type: imageMediaType, data: imageBase64 } }];
   if (logoBase64) {
     content.push({ type: 'image', source: { type: 'base64', media_type: logoMediaType, data: logoBase64 } });
     content.push({ type: 'text', text: '(Segunda imagen: logo del cliente.)\n\n' + msg });
   } else {
     content.push({ type: 'text', text: msg });
   }
-
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01' },
@@ -128,19 +79,18 @@ Logo incluido: ${logoBase64 ? 'Sí' : 'No'}`;
   if (!r.ok) throw new Error(data.error?.message || 'Error en agente Claude');
   const text = data.content.map(b => b.text || '').join('');
   try { return JSON.parse(text.replace(/```json|```/g, '').trim()); }
-  catch { throw new Error('El agente no devolvió JSON válido. Intentá de nuevo.'); }
+  catch { throw new Error('El agente no devolvió JSON válido.'); }
 }
 
 async function generateCopy({ slug, imageBase64, imageMediaType, analysis, ctas, network }) {
   const md = loadClient(slug) || '';
   const nets = { instagram: 'Instagram Feed', instagram_stories: 'Instagram Stories', linkedin: 'LinkedIn', facebook: 'Facebook' };
-
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514', max_tokens: 1000,
-      system: `Sos copywriter de esta marca:\n\n${md}\n\nRed: ${nets[network] || 'Instagram'}.\nLos CTAs son INMUTABLES, usá el texto exacto.\nRespondé ÚNICAMENTE con JSON válido, sin markdown.`,
+      system: `Sos copywriter de esta marca:\n\n${md}\n\nRed: ${nets[network] || 'Instagram'}.\nLos CTAs son INMUTABLES. Respondé ÚNICAMENTE con JSON válido, sin markdown.`,
       messages: [{
         role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: imageMediaType, data: imageBase64 } },
@@ -200,9 +150,14 @@ app.post('/api/generate-copy', async (req, res) => {
 
 app.get('/health', (_, res) => res.json({ status: 'ok', clients: listClients() }));
 
-console.log('STATIC PATH:', path.join(__dirname, 'public'));
-app.listen(PORT, () => {
 app.listen(PORT, () => {
   console.log(`\n✦ Docta Nexus Studio — http://localhost:${PORT}`);
-  console.log(`  Clientes: ${listClients().join(', ') || 'ninguno aún'}\n`);
+  console.log(`  Clientes: ${listClients().join(', ') || 'ninguno'}\n`);
 });
+```
+
+**4.** Clic en **"Commit changes"**
+
+**5.** Esperá que Render redeploya → revisá los logs, deberías ver:
+```
+STATIC PATH: /opt/render/project/src/public
