@@ -199,6 +199,7 @@ app.post('/api/generate-copy', async (req, res) => {
 });
 
 app.get('/health', (_, res) => res.json({ status: 'ok', clients: listClients() }));
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
 app.listen(PORT, () => {
   console.log(`\n✦ Docta Nexus Studio — http://localhost:${PORT}`);
