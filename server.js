@@ -200,6 +200,8 @@ app.post('/api/generate-copy', async (req, res) => {
 
 app.get('/health', (_, res) => res.json({ status: 'ok', clients: listClients() }));
 
+console.log('STATIC PATH:', path.join(__dirname, 'public'));
+app.listen(PORT, () => {
 app.listen(PORT, () => {
   console.log(`\n✦ Docta Nexus Studio — http://localhost:${PORT}`);
   console.log(`  Clientes: ${listClients().join(', ') || 'ninguno aún'}\n`);
