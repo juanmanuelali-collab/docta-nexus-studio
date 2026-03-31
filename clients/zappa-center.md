@@ -67,7 +67,12 @@ Composicion mas artistica, iluminacion cinematografica, angulos inesperados.
 - El calzado adjunto como foto producto NO se modifica bajo ninguna circunstancia
 - Los textos de los CTAs se usan EXACTAMENTE como el usuario los escribió
 - El logo NO se modifica.
-- No usar fondos blancos puros ni grises planos — siempre ambiente con vida
+
+## Instrucciones para el copy
+- Instagram Feed: copy corto y aspiracional, máximo 3-4 líneas + 5 hashtags (#ZappaCenter #CalzadoArgentino #Moda #Zapatos + 1 específico del producto)
+- Instagram Stories: 1 frase gancho + 1 CTA. Máximo 10 palabras en total
+- Facebook: copy más largo con descripción del producto, precio si lo tiene, y llamado a la tienda online
+- LinkedIn: no aplica para este cliente
 
 ## Instrucciones para el copy
 - Instagram Feed: copy corto y aspiracional, máximo 3-4 líneas + 5 hashtags (#ZappaCenter #CalzadoArgentino #Moda #Zapatos + 1 específico del producto)
@@ -77,19 +82,8 @@ Composicion mas artistica, iluminacion cinematografica, angulos inesperados.
 
 ## Aprendizajes de uso
 - Las escenas de cafetería con luz de mañana funcionan para botas y borcegos
-- El calzado en primer plano grande genera más clicks que las composiciones equilibradas
-- Los CTAs en rojo (#e63946) convierten mejor que en negro
-- Las imágenes con personas reales (no CGI) generan más confianza y engagement
-- Temporada actual: otoño/invierno → priorizar ambientes cálidos, tonos tierra, texturas
-
-## Instrucciones para el copy
-- Instagram Feed: copy corto y aspiracional, máximo 3-4 líneas + 5 hashtags (#ZappaCenter #CalzadoArgentino #Moda #Zapatos + 1 específico del producto)
-- Instagram Stories: 1 frase gancho + 1 CTA. Máximo 10 palabras en total
-- Facebook: copy más largo con descripción del producto, precio si lo tiene, y llamado a la tienda online
-- LinkedIn: no aplica para este cliente
-
-## Aprendizajes de uso
-- Las escenas de cafetería con luz de mañana funcionan para botas y borcegos
+- Siempre es muy importante no superponer CTA's sobre la imagen principal y caras que puedan existir en cada creatividad.
+- Es posible usar diferetes tipografías en los CTA's a los fines de descarlas más.
 - El calzado en primer plano grande genera más clicks que las composiciones equilibradas
 - Los CTAs en rojo (#e63946) convierten mejor que en negro
 - Las imágenes con personas reales (no CGI) generan más confianza y engagement
