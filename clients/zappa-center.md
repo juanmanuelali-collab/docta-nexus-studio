@@ -7,10 +7,7 @@
 - **Audiencia**: Familias y personas de todas las edades en Argentina, compradoras online de calzado accesible y de moda
 
 ## Paleta de colores
-- Principal: #1a1a1a
-- Secundario: #ffffff
-- Acento: #e63946
-- Texto sobre botones: #ffffff
+- A consideración del Brief.
 
 ## Tono de comunicación
 Cercano, moderno y aspiracional. Habla de moda accesible para toda la familia.
@@ -63,16 +60,13 @@ Composicion mas artistica, iluminacion cinematografica, angulos inesperados.
 - Stilettos / formales → showroom, edificio moderno, restaurante
 - Calzado infantil → parque, patio de escuela, living familiar
 
+## Instrucciones para el copy
+- Nunca colocar los CTA sobre la foto principal.
+
 ## Reglas de marca — NUNCA violar
 - El calzado adjunto como foto producto NO se modifica bajo ninguna circunstancia
 - Los textos de los CTAs se usan EXACTAMENTE como el usuario los escribió
 - El logo NO se modifica.
-
-## Instrucciones para el copy
-- Instagram Feed: copy corto y aspiracional, máximo 3-4 líneas + 5 hashtags (#ZappaCenter #CalzadoArgentino #Moda #Zapatos + 1 específico del producto)
-- Instagram Stories: 1 frase gancho + 1 CTA. Máximo 10 palabras en total
-- Facebook: copy más largo con descripción del producto, precio si lo tiene, y llamado a la tienda online
-- LinkedIn: no aplica para este cliente
 
 ## Instrucciones para el copy
 - Instagram Feed: copy corto y aspiracional, máximo 3-4 líneas + 5 hashtags (#ZappaCenter #CalzadoArgentino #Moda #Zapatos + 1 específico del producto)
