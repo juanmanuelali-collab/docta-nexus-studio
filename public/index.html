@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0b0d;--s1:#151518;--s2:#1e1e22;--s3:#27272c;
+  --border:#2c2c32;--border2:#3a3a42;
+  --text:#edeef0;--muted:#7a7a88;--muted2:#52525c;
+  --brand:#c8f135;--brand2:#a3c72c;
+  --brand-dim:rgba(200,241,53,.07);--brand-dim2:rgba(200,241,53,.15);
+  --brand-btn-text:#0b0b0d;
+  --purple:#a78cf4;--teal:#3ecfaa;
+  --danger:#f26d6d;--success:#5de8a0;--amber:#f5a623;
+  --r:10px;--rlg:16px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;min-height:100vh}
+#loader{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.spin-lg{width:32px;height:32px;border:2px solid var(--border2);border-top-color:var(--brand);border-radius:50%;animation:sp .7s linear infinite}
+#loader p{font-size:13px;color:var(--muted)}
+#loader.off{display:none}
+#notfound{display:none;text-align:center;padding:5rem 2rem}
+#notfound h1{font-family:'DM Serif Display',serif;font-size:2.2rem;margin-bottom:1rem}
+#notfound p{color:var(--muted);font-size:14px;line-height:1.8}
+#app{display:none}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(11,11,13,.94);backdrop-filter:blur(14px)}
+.hdr-left{display:flex;align-items:center;gap:10px}
+.cname{font-family:'DM Serif Display',serif;font-size:1.25rem}
+.cname .sep{font-style:italic;color:var(--muted2);font-size:1rem;margin-left:4px}
+.badges{display:flex;gap:7px}
+.bdg{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:20px}
+.bdg-brand{color:var(--brand);background:var(--brand-dim);border:1px solid rgba(200,241,53,.22)}
+.bdg-amber{color:var(--amber);background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.22)}
+.wrap{max-width:1160px;margin:0 auto;padding:2rem 1.5rem 5rem;display:grid;grid-template-columns:460px 1fr;gap:1.5rem;align-items:start}
+@media(max-width:860px){.wrap{grid-template-columns:1fr}.hdr{padding:1rem}}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--rlg);padding:1.4rem;margin-bottom:1.2rem}
+.card:last-child{margin-bottom:0}
+.clabel{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:7px}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--brand);flex-shrink:0}
+.dot-a{background:var(--amber)}
+.dot-ref{background:var(--purple)}
+input[type=text],textarea,select{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 14px;outline:none;transition:border-color .2s,background .2s}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--brand);background:var(--s3)}
+textarea{resize:vertical;line-height:1.6}
+.flabel{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.guarantee{background:rgba(167,140,244,.07);border:1px solid rgba(167,140,244,.2);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--purple);line-height:1.6;display:flex;gap:8px;margin-bottom:1rem}
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.upzone{border:1.5px dashed var(--border2);border-radius:var(--r);background:var(--s2);cursor:pointer;text-align:center;padding:1.4rem 1rem;transition:all .2s;position:relative;overflow:hidden}
+.upzone:hover{border-color:var(--brand);background:var(--brand-dim)}
+.upzone.filled{border-style:solid;border-color:var(--brand);padding:0}
+.upzone.ref-filled{border-color:var(--purple)}
+.upzone input[type=file]{display:none}
+.upzone img{width:100%;display:block;border-radius:calc(var(--r) - 1px)}
+.upzone.pz img{max-height:180px;object-fit:cover}
+.upzone.lz img,.upzone.rz img{max-height:90px;object-fit:contain;padding:8px;background:var(--s2)}
+.uphint{font-size:12px;color:var(--muted);line-height:1.6}
+.uphint strong{color:var(--brand);font-weight:500}
+.uphint strong.ref{color:var(--purple)}
+.upico{font-size:1.5rem;display:block;margin-bottom:5px}
+.rmv{position:absolute;top:6px;right:6px;background:rgba(11,11,13,.85);border:1px solid var(--border2);color:var(--muted);font-size:11px;padding:3px 8px;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.rmv:hover{color:var(--text);border-color:var(--brand)}
+.ref-tag{position:absolute;bottom:6px;left:6px;background:rgba(167,140,244,.2);border:1px solid rgba(167,140,244,.4);color:var(--purple);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;pointer-events:none}
+.cta-list{display:flex;flex-direction:column;gap:7px}
+.cta-row{display:flex;align-items:center;gap:8px}
+.cta-n{width:22px;height:22px;border-radius:50%;background:var(--brand-dim2);border:1px solid var(--brand);color:var(--brand);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.netgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.netbtn{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:6px;transition:all .15s}
+.netbtn:hover{border-color:var(--border2);color:var(--text)}
+.netbtn.on{border-color:var(--brand);color:var(--brand);background:var(--brand-dim)}
+.nr{margin-left:auto;font-size:10px;color:var(--muted2)}
+.netbtn.on .nr{color:var(--brand2)}
+.genbtn{width:100%;background:var(--brand);color:var(--brand-btn-text);border:none;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;padding:14px;cursor:pointer;transition:all .2s;margin-top:1.2rem;display:flex;align-items:center;justify-content:center;gap:8px}
+.genbtn:hover{background:var(--brand2);transform:translateY(-1px)}
+.genbtn:active{transform:translateY(0)}
+.genbtn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.outcrd{background:var(--s1);border:1px solid var(--border);border-radius:var(--rlg);padding:1.4rem;position:sticky;top:80px}
+.pipeline{display:none;flex-direction:column;gap:2px;margin-bottom:1.2rem}
+.pipeline.show{display:flex}
+.pstep{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:8px;font-size:13px;color:var(--muted);transition:all .3s}
+.pstep.active{background:var(--brand-dim);color:var(--text)}
+.pstep.done{color:var(--success)}
+.pstep.error{color:var(--danger)}
+.pico{flex-shrink:0;width:18px;text-align:center;margin-top:1px}
+.pdtl{font-size:12px;color:var(--muted2);margin-top:2px}
+.spin{width:13px;height:13px;border:1.5px solid var(--border2);border-top-color:var(--brand);border-radius:50%;animation:sp .7s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+.abox{background:var(--s2);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;display:none}
+.abox.show{display:block}
+.atitle{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--purple);margin-bottom:8px}
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px}
+.aitem .ak{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+.aitem .av{color:var(--text);font-size:12px;margin-top:1px;line-height:1.4}
+.aprompt{font-size:11px;color:var(--muted);line-height:1.6;padding-top:8px;border-top:1px solid var(--border)}
+.aprompt strong{color:var(--teal)}
+.tabs{display:flex;gap:4px;background:var(--s2);border-radius:9px;padding:3px;margin-bottom:1rem}
+.tab{flex:1;text-align:center;padding:7px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;color:var(--muted);transition:all .2s;border:none;background:transparent;font-family:'DM Sans',sans-serif}
+.tab.on{background:var(--s1);color:var(--text)}
+.tpanel{display:none}
+.tpanel.on{display:block}
+.cvwrap{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);margin-bottom:.8rem;background:var(--s2);min-height:80px;display:flex;align-items:center;justify-content:center}
+.cvwrap canvas{width:100%;display:block}
+.dlbtn{width:100%;background:transparent;border:1px solid var(--brand);color:var(--brand);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:9px;cursor:pointer;transition:all .2s}
+.dlbtn:hover{background:var(--brand-dim2)}
+.cblock{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1.1rem;margin-bottom:.6rem;position:relative}
+.cblabel{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:6px}
+.cbtext{font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap;padding-right:56px}
+.tipblock{background:var(--brand-dim);border:1px solid rgba(200,241,53,.2);border-radius:var(--r);padding:.75rem 1rem;font-size:12px;color:var(--brand2);line-height:1.6;display:flex;gap:8px}
+.cpbtn{position:absolute;top:9px;right:9px;background:var(--s1);border:1px solid var(--border2);color:var(--muted);font-size:10px;padding:3px 9px;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.cpbtn:hover{color:var(--brand);border-color:var(--brand)}
+.cpbtn.ok{color:var(--success);border-color:var(--success)}
+.empty{text-align:center;padding:3rem 1rem;color:var(--muted)}
+.emico{font-size:2.5rem;display:block;margin-bottom:.8rem}
+.errbar{background:rgba(242,109,109,.1);border:1px solid var(--danger);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--danger);margin-bottom:1rem;display:none;line-height:1.5}
+.errbar.show{display:block}
+
+/* ── EDITOR ZONAS SEGURAS ─────────────────────────────────── */
+.zones-editor{position:relative;border-radius:var(--r);overflow:hidden;cursor:crosshair;user-select:none}
+.zones-editor canvas{display:block;width:100%}
+.zone-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.75rem;align-items:center}
+.ztool{padding:5px 11px;border-radius:7px;border:1px solid var(--border2);background:var(--s2);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;display:flex;align-items:center;gap:5px}
+.ztool:hover{color:var(--text);border-color:var(--border2)}
+.ztool.active{color:#fff!important;border-color:transparent!important}
+.ztool[data-zone="titulo"].active{background:#3b82f6}
+.ztool[data-zone="promo"].active{background:#8b5cf6}
+.ztool[data-zone="boton"].active{background:#ef4444}
+.ztool[data-zone="logo"].active{background:#f59e0b}
+.ztool[data-zone="libre"].active{background:#10b981}
+.ztool-clear{margin-left:auto}
+.ztool-clear:hover{border-color:var(--danger)!important;color:var(--danger)!important}
+.zone-hint{font-size:11px;color:var(--muted);margin-top:.6rem;line-height:1.6}
+.zone-hint strong{color:var(--text)}
+.zones-summary{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-top:.75rem;font-size:12px;line-height:2;display:none}
+.zones-summary.show{display:block}
+.zone-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600;margin:2px}
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="spin-lg"></div><p>Cargando agente...</p></div>
+<div id="notfound">
+  <h1>Cliente no encontrado</h1>
+  <p>La URL no corresponde a ningún cliente activo.<br>Verificá el link o contactá a Docta Nexus.</p>
+</div>
+
+<div id="app">
+  <header class="hdr">
+    <div class="hdr-left">
+      <div class="cname"><span id="hdrName"></span><span class="sep">Studio</span></div>
+    </div>
+    <div class="badges">
+      <div class="bdg bdg-amber">🔒 Foto intacta</div>
+      <div class="bdg bdg-amber">🔒 CTAs exactos</div>
+      <div class="bdg bdg-brand" id="agentBadge">Agente activo</div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <!-- IZQUIERDA -->
+    <div>
+      <div class="guarantee">
+        <span>🛡️</span>
+        <span>El agente de <strong id="guarName"></strong> nunca modifica tu foto ni los textos de tus CTAs.</span>
+      </div>
+
+      <div class="card">
+        <div class="clabel"><span class="dot"></span>Imágenes</div>
+        <div class="dual">
+          <div>
+            <div class="flabel">Foto principal *</div>
+            <div class="upzone pz" id="photoZone" onclick="document.getElementById('photoInput').click()">
+              <input type="file" id="photoInput" accept="image/*" onchange="handleUpload(event,'photo')">
+              <span class="upico">📸</span>
+              <div class="uphint"><strong>Subir foto</strong><br><span style="font-size:11px">No será modificada</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="flabel">Logo (opcional)</div>
+            <div class="upzone lz" id="logoZone" onclick="document.getElementById('logoInput').click()">
+              <input type="file" id="logoInput" accept="image/*" onchange="handleUpload(event,'logo')">
+              <span class="upico">🏷️</span>
+              <div class="uphint"><strong>Subir logo</strong><br><span style="font-size:11px">PNG recomendado</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMAGEN DE REFERENCIA -->
+      <div class="card">
+        <div class="clabel"><span class="dot dot-ref"></span>Imagen de referencia <span style="color:var(--muted2);font-size:9px;margin-left:4px">(opcional)</span></div>
+        <div class="upzone rz" id="refZone" onclick="document.getElementById('refInput').click()">
+          <input type="file" id="refInput" accept="image/*" onchange="handleUpload(event,'ref')">
+          <span class="upico">🖼️</span>
+          <div class="uphint">
+            <strong class="ref">Subir imagen de referencia</strong><br>
+            <span style="font-size:11px">El agente analiza su estilo, composición y paleta<br>para inspirarse al generar el prompt</span>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.7">
+          Podés subir una pieza que te gustó, un anuncio de referencia, un moodboard o cualquier imagen cuyo estilo quieras replicar.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="clabel"><span class="dot"></span>Descripción creativa</div>
+        <textarea id="userPrompt" style="height:80px" placeholder="Describí la pieza: tono, estética, qué querés transmitir..."></textarea>
+      </div>
+
+      <div class="card">
+        <div class="clabel"><span class="dot-a dot"></span>Textos de la pieza — exactos e inmutables</div>
+        <div class="cta-list">
+          <div class="cta-row">
+            <span class="cta-n" style="background:rgba(59,130,246,.2);border-color:#3b82f6;color:#3b82f6;font-size:9px;width:28px;height:28px;border-radius:6px;flex-direction:column;gap:0;line-height:1">T</span>
+            <div style="flex:1">
+              <div class="flabel" style="margin-bottom:3px">Título</div>
+              <input type="text" id="cta1" placeholder="Ej: Nueva Temporada Invierno" oninput="renderZones()">
+            </div>
+          </div>
+          <div class="cta-row">
+            <span class="cta-n" style="background:rgba(139,92,246,.2);border-color:#8b5cf6;color:#8b5cf6;font-size:9px;width:28px;height:28px;border-radius:6px;flex-direction:column;gap:0;line-height:1">P</span>
+            <div style="flex:1">
+              <div class="flabel" style="margin-bottom:3px">Promo</div>
+              <input type="text" id="cta2" placeholder="Ej: 6 Cuotas Sin Interés · Envío Gratis" oninput="renderZones()">
+            </div>
+          </div>
+          <div class="cta-row">
+            <span class="cta-n" style="background:rgba(239,68,68,.2);border-color:#ef4444;color:#ef4444;font-size:9px;width:28px;height:28px;border-radius:6px;flex-direction:column;gap:0;line-height:1">B</span>
+            <div style="flex:1">
+              <div class="flabel" style="margin-bottom:3px">Botón CTA</div>
+              <input type="text" id="cta3" placeholder="Ej: Comprar Ahora" oninput="renderZones()">
+            </div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.7">
+          ⚠️ Estos textos aparecen <strong style="color:var(--amber)">exactamente</strong> como los escribís.
+          Marcá las zonas en el canvas de la derecha para indicar dónde va cada uno.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="clabel"><span class="dot"></span>Red social destino</div>
+        <div class="netgrid">
+          <button class="netbtn on" data-net="instagram" onclick="selNet(this)">📷 Instagram Feed <span class="nr">1:1</span></button>
+          <button class="netbtn" data-net="instagram_stories" onclick="selNet(this)">🎬 Stories/Reels <span class="nr">9:16</span></button>
+          <button class="netbtn" data-net="linkedin" onclick="selNet(this)">💼 LinkedIn <span class="nr">16:9</span></button>
+          <button class="netbtn" data-net="facebook" onclick="selNet(this)">📘 Facebook <span class="nr">4:5</span></button>
+        </div>
+        <button class="genbtn" id="genBtn" onclick="runPipeline()">
+          <span>✦</span><span id="btnTxt">Generar pieza + copy</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- DERECHA -->
+    <div>
+      <!-- EDITOR ZONAS SEGURAS -->
+      <div class="card" style="margin-bottom:1.2rem">
+        <div class="clabel"><span class="dot dot-ref"></span>Editor de zonas seguras</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:.75rem;line-height:1.7">
+          Seleccioná el tipo de zona y <strong style="color:var(--text)">arrastrá</strong> sobre el canvas.<br>
+          Las zonas <span style="color:#3b82f6;font-weight:600">Título</span>, <span style="color:#8b5cf6;font-weight:600">Promo</span> y <span style="color:#ef4444;font-weight:600">Botón CTA</span> muestran el texto real del campo correspondiente.
+        </div>
+        <div class="zone-toolbar">
+          <button class="ztool active" data-zone="titulo" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#3b82f6;border-radius:2px"></span>T — Título
+          </button>
+          <button class="ztool" data-zone="promo" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#8b5cf6;border-radius:2px"></span>P — Promo
+          </button>
+          <button class="ztool" data-zone="boton" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#ef4444;border-radius:2px"></span>B — Botón CTA
+          </button>
+          <button class="ztool" data-zone="producto" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#06b6d4;border-radius:2px"></span>📦 Producto
+          </button>
+          <button class="ztool" data-zone="logo" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#f59e0b;border-radius:2px"></span>Logo
+          </button>
+          <button class="ztool" data-zone="libre" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#10b981;border-radius:2px"></span>Libre
+          </button>
+          <button class="ztool ztool-clear" onclick="clearAllZones()">✕ Limpiar</button>
+        </div>
+        <div class="zones-editor" id="zonesEditor">
+          <canvas id="zonesCanvas"></canvas>
+        </div>
+        <div class="zone-hint">
+          Seleccioná un tipo arriba y <strong>arrastrá</strong> sobre el canvas para marcar la zona.
+          El agente recibirá estas instrucciones al generar el prompt.
+        </div>
+        <div class="zones-summary" id="zonesSummary"></div>
+      </div>
+
+      <!-- OUTPUT -->
+      <div class="outcrd">
+        <div class="clabel"><span class="dot"></span>Output</div>
+        <div class="errbar" id="errBar"></div>
+        <div class="pipeline" id="pipeline">
+          <div class="pstep" id="s1"><span class="pico" id="i1">🔍</span><div><div>Agente analiza foto y referencia</div><div class="pdtl" id="d1"></div></div></div>
+          <div class="pstep" id="s2"><span class="pico" id="i2">🎨</span><div><div>FLUX.2 Pro genera la pieza completa</div><div class="pdtl" id="d2"></div></div></div>
+          <div class="pstep" id="s3"><span class="pico" id="i3">🖼️</span><div><div>Agregando logo a la pieza</div><div class="pdtl" id="d3"></div></div></div>
+          <div class="pstep" id="s4"><span class="pico" id="i4">✍️</span><div><div>Copy con voz de la marca</div><div class="pdtl" id="d4"></div></div></div>
+        </div>
+        <div class="abox" id="abox">
+          <div class="atitle">✦ Análisis del agente</div>
+          <div class="agrid" id="agrid"></div>
+          <div class="aprompt" id="aprompt"></div>
+        </div>
+        <div class="empty" id="emptyState">
+          <span class="emico">🎨</span>
+          <div style="font-size:14px;line-height:1.8">Subí tu foto, marcá las zonas seguras<br>y hacé clic en <strong style="color:var(--brand)">Generar pieza</strong></div>
+        </div>
+        <div id="result" style="display:none">
+          <div class="tabs">
+            <button class="tab on" onclick="swTab('img')">Pieza final</button>
+            <button class="tab" onclick="swTab('copy')">Copy para redes</button>
+          </div>
+          <div class="tpanel on" id="tp-img">
+            <!-- Canvas principal -->
+            <div class="cvwrap"><canvas id="outputCanvas"></canvas></div>
+            <!-- Canvas Instagram 4:5 (solo cuando se genera doble) -->
+            <div id="canvas45Wrap" style="display:none">
+              <div style="font-size:11px;color:var(--muted);margin:.6rem 0 .3rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em">Instagram Feed 4:5</div>
+              <div class="cvwrap"><canvas id="outputCanvas45"></canvas></div>
+            </div>
+            <!-- Acciones -->
+            <div style="margin-top:.8rem;display:flex;flex-direction:column;gap:8px">
+              <!-- Selector formato + descarga -->
+              <div style="display:flex;gap:8px;align-items:center">
+                <div style="display:flex;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;flex-shrink:0">
+                  <button id="fmtJpg" onclick="setFmt('jpg')" style="padding:8px 14px;font-size:12px;font-weight:600;font-family:inherit;border:none;cursor:pointer;background:var(--brand);color:var(--brand-btn-text);transition:all .2s">JPG</button>
+                  <button id="fmtPng" onclick="setFmt('png')" style="padding:8px 14px;font-size:12px;font-weight:600;font-family:inherit;border:none;cursor:pointer;background:transparent;color:var(--muted);transition:all .2s">PNG</button>
+                </div>
+                <button class="dlbtn" style="flex:1;margin:0" onclick="dlCanvas('main')">⬇ Descargar 1:1</button>
+                <button id="dl45Btn" class="dlbtn" style="flex:1;margin:0;display:none" onclick="dlCanvas('45')">⬇ Descargar 4:5</button>
+              </div>
+              <!-- Regenerar / Nueva pieza -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <button onclick="regenerar()" style="padding:9px;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px" onmouseover="this.style.borderColor='var(--brand)'" onmouseout="this.style.borderColor='var(--border2)'">
+                  🔄 Regenerar
+                </button>
+                <button onclick="nuevaPieza()" style="padding:9px;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);color:var(--muted);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px" onmouseover="this.style.borderColor='var(--danger)';this.style.color='var(--danger)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">
+                  ✕ Nueva pieza
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="tpanel" id="tp-copy">
+            <div id="copyBlocks"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── ESTADO ─────────────────────────────────────────────────
+let slug=null, meta=null;
+let photo=null, photoMime='image/jpeg', photoSrc=null;
+let logo=null,  logoMime='image/png',   logoSrc=null;
+let refImg=null, refMime='image/jpeg',  refSrc=null;
+let selNetwork='instagram', agentResult=null;
+let dlFormat='jpg';
+let lastPayload=null, lastAgent=null; // para regenerar
+
+const DIMS={
+  instagram:{w:1080,h:1080},
+  instagram_stories:{w:1080,h:1920},
+  linkedin:{w:1920,h:1080},
+  facebook:{w:1080,h:1350},
+  instagram_45:{w:1080,h:1350}
+};
+
+// ── ZONAS SEGURAS ───────────────────────────────────────────
+const ZONE_CFG={
+  titulo:  {fill:'rgba(59,130,246,.22)',  stroke:'#3b82f6', label:'Titulo'},
+  promo:   {fill:'rgba(139,92,246,.22)',  stroke:'#8b5cf6', label:'Promo'},
+  boton:   {fill:'rgba(239,68,68,.22)',   stroke:'#ef4444', label:'Boton CTA'},
+  producto:{fill:'rgba(6,182,212,.22)',   stroke:'#06b6d4', label:'Producto'},
+  logo:    {fill:'rgba(245,158,11,.22)',  stroke:'#f59e0b', label:'Logo'},
+  libre:   {fill:'rgba(16,185,129,.22)',  stroke:'#10b981', label:'Zona libre'},
+};
+
+let zones=[], activeZone='titulo', drawing=false, drawStart=null;
+let zCvs, zCtx, zW, zH;
+
+function initZonesEditor(){
+  zCvs=document.getElementById('zonesCanvas');
+  zCtx=zCvs.getContext('2d');
+  resizeZones();
+
+  zCvs.addEventListener('mousedown', e=>{ drawing=true; drawStart=zPos(e); });
+  zCvs.addEventListener('mousemove', e=>{ if(!drawing)return; renderZones(zPos(e)); });
+  zCvs.addEventListener('mouseup',   e=>{ if(!drawing)return; drawing=false; addZone(zPos(e)); });
+  zCvs.addEventListener('mouseleave',()=>{ if(drawing){drawing=false; renderZones();} });
+
+  zCvs.addEventListener('touchstart', e=>{ e.preventDefault(); drawing=true; drawStart=zPos(e.touches[0]); },{passive:false});
+  zCvs.addEventListener('touchmove',  e=>{ e.preventDefault(); if(drawing) renderZones(zPos(e.touches[0])); },{passive:false});
+  zCvs.addEventListener('touchend',   e=>{ e.preventDefault(); if(drawing){drawing=false;addZone(zPos(e.changedTouches[0]));} },{passive:false});
+
+  // Click para borrar zona (hit en el ✕)
+  zCvs.addEventListener('click', e=>{
+    if(drawing) return;
+    const p=zPos(e);
+    for(let i=zones.length-1;i>=0;i--){
+      const z=zones[i];
+      const bx=(z.x+z.w)*zW-18, by=z.y*zH+2;
+      if(Math.hypot(p.x-(bx+8), p.y-(by+8))<10){
+        zones.splice(i,1); renderZones(); updateSummary(); return;
+      }
+    }
+  });
+}
+
+function resizeZones(){
+  const dims=DIMS[selNetwork]||DIMS.instagram;
+  const W=zCvs.parentElement.clientWidth||420;
+  zCvs.width=W; zCvs.height=Math.round(W*(dims.h/dims.w));
+  zW=zCvs.width; zH=zCvs.height;
+  renderZones();
+}
+
+function zPos(e){
+  const r=zCvs.getBoundingClientRect();
+  return { x:(e.clientX-r.left)*(zW/r.width), y:(e.clientY-r.top)*(zH/r.height) };
+}
+
+function addZone(p){
+  const w=Math.abs(p.x-drawStart.x), h=Math.abs(p.y-drawStart.y);
+  if(w>12&&h>12){
+    zones.push({
+      type:activeZone,
+      x:Math.min(drawStart.x,p.x)/zW, y:Math.min(drawStart.y,p.y)/zH,
+      w:w/zW, h:h/zH
+    });
+  }
+  renderZones(); updateSummary();
+}
+
+// Mapa de zona → id del campo de texto
+const ZONE_FIELD={titulo:'cta1', promo:'cta2', boton:'cta3'};
+
+function getZoneText(type){
+  const fieldId=ZONE_FIELD[type];
+  if(!fieldId) return null;
+  return document.getElementById(fieldId)?.value.trim()||null;
+}
+
+function renderZones(cursor){
+  zCtx.clearRect(0,0,zW,zH);
+  // Fondo
+  zCtx.fillStyle='#1a1a1e'; zCtx.fillRect(0,0,zW,zH);
+  // Cuadricula
+  zCtx.strokeStyle='rgba(255,255,255,.05)'; zCtx.lineWidth=1;
+  const g=zW/6;
+  for(let x=g;x<zW;x+=g){zCtx.beginPath();zCtx.moveTo(x,0);zCtx.lineTo(x,zH);zCtx.stroke();}
+  const gH=zW/6*(DIMS[selNetwork]||DIMS.instagram).h/(DIMS[selNetwork]||DIMS.instagram).w;
+  for(let y=gH;y<zH;y+=gH){zCtx.beginPath();zCtx.moveTo(0,y);zCtx.lineTo(zW,y);zCtx.stroke();}
+  // Label formato
+  zCtx.fillStyle='rgba(255,255,255,.12)'; zCtx.font='11px DM Sans,sans-serif';
+  zCtx.textAlign='right'; zCtx.fillText(selNetwork.replace('_',' '),zW-8,zH-8);
+
+  // Zonas guardadas
+  zones.forEach(z=>{
+    const c=ZONE_CFG[z.type];
+    const px=z.x*zW, py=z.y*zH, pw=z.w*zW, ph=z.h*zH;
+
+    // Fondo de la zona
+    zCtx.fillStyle=c.fill;
+    zCtx.strokeStyle=c.stroke;
+    zCtx.lineWidth=1.5;
+    zCtx.setLineDash([]);
+    zCtx.fillRect(px,py,pw,ph);
+    zCtx.strokeRect(px,py,pw,ph);
+
+    // Texto real del campo (si existe) o label del tipo
+    const realText=getZoneText(z.type);
+    const centY=py+ph/2;
+
+    if(realText && ph>28){
+      // Mostrar el texto real centrado en la zona
+      const maxFontSize=Math.min(ph*0.28, pw*0.08, 18);
+      const fontSize=Math.max(maxFontSize, 10);
+      zCtx.font='600 '+fontSize+'px DM Sans,sans-serif';
+      zCtx.fillStyle='rgba(255,255,255,.95)';
+      zCtx.textAlign='center';
+      zCtx.textBaseline='middle';
+      // Truncar si es muy largo
+      let txt=realText;
+      while(zCtx.measureText(txt).width>pw-12 && txt.length>3) txt=txt.slice(0,-1);
+      if(txt!==realText) txt=txt.slice(0,-1)+'…';
+      zCtx.fillText(txt, px+pw/2, centY);
+      // Label tipo arriba a la izquierda (pequeño)
+      zCtx.font='bold 9px DM Sans,sans-serif';
+      zCtx.fillStyle=c.stroke;
+      zCtx.textAlign='left';
+      zCtx.textBaseline='top';
+      zCtx.fillText(c.label.toUpperCase(), px+5, py+4);
+    } else {
+      // Sin texto real: mostrar solo el label del tipo centrado
+      zCtx.font='bold 11px DM Sans,sans-serif';
+      zCtx.fillStyle=c.stroke;
+      zCtx.textAlign='left';
+      zCtx.textBaseline='top';
+      zCtx.fillText(c.label, px+6, py+5);
+    }
+
+    // Botón borrar (esquina superior derecha)
+    const bx=px+pw-18, by=py+2;
+    zCtx.fillStyle='rgba(0,0,0,.55)';
+    zCtx.beginPath(); zCtx.arc(bx+8,by+8,8,0,Math.PI*2); zCtx.fill();
+    zCtx.fillStyle='#fff';
+    zCtx.font='bold 10px DM Sans,sans-serif';
+    zCtx.textAlign='center';
+    zCtx.textBaseline='middle';
+    zCtx.fillText('x', bx+8, by+8);
+  });
+
+  // Preview al dibujar
+  if(cursor&&drawing&&drawStart){
+    const c=ZONE_CFG[activeZone];
+    const px=Math.min(drawStart.x,cursor.x), py=Math.min(drawStart.y,cursor.y);
+    const pw=Math.abs(cursor.x-drawStart.x), ph=Math.abs(cursor.y-drawStart.y);
+    zCtx.fillStyle=c.fill; zCtx.strokeStyle=c.stroke; zCtx.lineWidth=2;
+    zCtx.setLineDash([5,4]); zCtx.fillRect(px,py,pw,ph); zCtx.strokeRect(px,py,pw,ph);
+    zCtx.setLineDash([]);
+  }
+  zCtx.textAlign='left'; zCtx.textBaseline='alphabetic';
+}
+
+function selZoneTool(btn){
+  document.querySelectorAll('.ztool[data-zone]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); activeZone=btn.dataset.zone;
+}
+
+function clearAllZones(){ zones=[]; renderZones(); updateSummary(); }
+
+function updateSummary(){
+  const el=document.getElementById('zonesSummary');
+  if(!zones.length){el.classList.remove('show');return;}
+  const counts={};
+  zones.forEach(z=>counts[z.type]=(counts[z.type]||0)+1);
+  el.innerHTML='<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Zonas marcadas: </span>'+
+    Object.entries(counts).map(([t,n])=>{
+      const c=ZONE_CFG[t];
+      const txt=getZoneText(t);
+      const preview=txt?' — "'+txt.slice(0,20)+(txt.length>20?'…':'')+'"':'';
+      return '<span class="zone-pill" style="background:'+c.fill+';border:1px solid '+c.stroke+';color:'+c.stroke+'">'+c.label+' x'+n+preview+'</span>';
+    }).join('');
+  el.classList.add('show');
+}
+
+function zonesToInstructions(){
+  if(!zones.length) return '';
+  const lines=zones.map(z=>{
+    const c=ZONE_CFG[z.type];
+    const x1=Math.round(z.x*100), y1=Math.round(z.y*100);
+    const x2=Math.round((z.x+z.w)*100), y2=Math.round((z.y+z.h)*100);
+    const hPos=((x1+x2)/2)<33?'izquierda':((x1+x2)/2)>66?'derecha':'centro';
+    const vPos=((y1+y2)/2)<33?'superior':((y1+y2)/2)>66?'inferior':'medio';
+    const realText=getZoneText(z.type);
+    const textNote=realText?' — texto exacto a respetar: "'+realText+'"':'';
+    return '- '+c.label+textNote+': zona '+vPos+' '+hPos+' ('+x1+'%-'+x2+'% horizontal, '+y1+'%-'+y2+'% vertical). Dejar visualmente libre con fondo neutro para que el texto sea legible.';
+  });
+  return '\n\nZONAS SEGURAS CON TEXTOS EXACTOS (respetar en la composicion):\n'+lines.join('\n')+'\nIMPORTANTE: en estas zonas el fondo debe ser neutro, oscuro suave o con gradiente para que los textos indicados sean perfectamente legibles.';
+}
+
+// ── INIT ────────────────────────────────────────────────────
+function hexRgba(hex,a){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return 'rgba('+r+','+g+','+b+','+a+')';}
+
+function applyBranding(m){
+  const r=document.documentElement;
+  r.style.setProperty('--brand',m.colorPrimary);
+  r.style.setProperty('--brand2',m.colorAccent);
+  r.style.setProperty('--brand-dim',hexRgba(m.colorPrimary,.07));
+  r.style.setProperty('--brand-dim2',hexRgba(m.colorPrimary,.15));
+  r.style.setProperty('--brand-btn-text',m.colorBtnText);
+  document.title=m.name+' — Studio';
+  document.getElementById('hdrName').textContent=m.name;
+  document.getElementById('guarName').textContent=m.name;
+  document.getElementById('agentBadge').textContent='Agente '+m.name;
+}
+
+function detectSlug(){
+  const p=window.location.pathname.replace(/^\/+|\/+$/g,'');
+  if(p) return p;
+  return new URLSearchParams(window.location.search).get('client');
+}
+
+async function init(){
+  const s=detectSlug();
+  if(!s){document.getElementById('loader').classList.add('off');document.getElementById('notfound').style.display='block';return;}
+  try{
+    const res=await fetch('/api/client/'+s);
+    if(!res.ok) throw new Error();
+    meta=await res.json(); slug=s;
+    applyBranding(meta);
+    document.getElementById('loader').classList.add('off');
+    document.getElementById('app').style.display='block';
+    setTimeout(initZonesEditor,60);
+  }catch{
+    document.getElementById('loader').classList.add('off');
+    document.getElementById('notfound').style.display='block';
+  }
+}
+init();
+
+// ── UPLOADS ─────────────────────────────────────────────────
+function handleUpload(e,type){
+  const file=e.target.files[0]; if(!file) return;
+  if(file.size>15*1024*1024){alert('Archivo supera 15 MB.');return;}
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const src=ev.target.result;
+    if(type==='photo'){photo=src.split(',')[1];photoMime=file.type||'image/jpeg';photoSrc=src;fillUpZone('photoZone',src,'photo');}
+    else if(type==='logo'){logo=src.split(',')[1];logoMime=file.type||'image/png';logoSrc=src;fillUpZone('logoZone',src,'logo');}
+    else if(type==='ref'){refImg=src.split(',')[1];refMime=file.type||'image/jpeg';refSrc=src;fillRefZone(src);}
+  };
+  reader.readAsDataURL(file);
+}
+
+function fillUpZone(id,src,type){
+  const z=document.getElementById(id); z.classList.add('filled');
+  z.innerHTML='<img src="'+src+'" alt=""><button class="rmv" onclick="clearUpZone(event,\''+type+'\')">✕</button>';
+}
+
+function fillRefZone(src){
+  const z=document.getElementById('refZone');
+  z.classList.add('filled','ref-filled');
+  z.innerHTML='<img src="'+src+'" alt=""><button class="rmv" onclick="clearRefZone(event)">✕</button><span class="ref-tag">Referencia</span>';
+}
+
+function clearRefZone(e){
+  e.stopPropagation(); refImg=null; refSrc=null;
+  const z=document.getElementById('refZone'); z.classList.remove('filled','ref-filled');
+  z.innerHTML='<input type="file" id="refInput" accept="image/*" onchange="handleUpload(event,\'ref\')"><span class="upico">🖼️</span><div class="uphint"><strong class="ref">Subir imagen de referencia</strong><br><span style="font-size:11px">El agente analiza su estilo, composicion y paleta</span></div>';
+  z.onclick=()=>document.getElementById('refInput').click();
+}
+
+function clearUpZone(e,type){
+  e.stopPropagation();
+  if(type==='photo'){photo=null;photoSrc=null;}else{logo=null;logoSrc=null;}
+  const ip=type==='photo';
+  const id=ip?'photoZone':'logoZone', ico=ip?'📸':'🏷️';
+  const txt=ip?'<strong>Subir foto</strong><br><span style="font-size:11px">No sera modificada</span>':'<strong>Subir logo</strong><br><span style="font-size:11px">PNG recomendado</span>';
+  const z=document.getElementById(id); z.classList.remove('filled');
+  z.innerHTML='<input type="file" id="'+(ip?'photoInput':'logoInput')+'" accept="image/*" onchange="handleUpload(event,\''+type+'\')"><span class="upico">'+ico+'</span><div class="uphint">'+txt+'</div>';
+  z.onclick=()=>document.getElementById(ip?'photoInput':'logoInput').click();
+}
+
+const pz=document.getElementById('photoZone');
+pz.addEventListener('dragover',e=>{e.preventDefault();pz.style.borderColor='var(--brand)';});
+pz.addEventListener('dragleave',()=>pz.style.borderColor='');
+pz.addEventListener('drop',e=>{e.preventDefault();pz.style.borderColor='';const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))handleUpload({target:{files:[f]}},'photo');});
+
+// ── RED SOCIAL ───────────────────────────────────────────────
+function selNet(btn){
+  document.querySelectorAll('.netbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on'); selNetwork=btn.dataset.net;
+  if(zCvs) resizeZones();
+}
+
+// ── STEPS ────────────────────────────────────────────────────
+const defIco={1:'🔍',2:'🎨',3:'🖼️',4:'✍️'};
+function setStep(n,status,detail){
+  const el=document.getElementById('s'+n),ic=document.getElementById('i'+n),dt=document.getElementById('d'+n);
+  el.className='pstep '+status;
+  if(status==='active')ic.innerHTML='<span class="spin"></span>';
+  else if(status==='done')ic.textContent='✓';
+  else if(status==='error')ic.textContent='✗';
+  else ic.textContent=defIco[n];
+  if(detail!==undefined)dt.textContent=detail;
+}
+function showErr(msg){const b=document.getElementById('errBar');b.innerHTML='<strong>Error:</strong> '+msg;b.classList.add('show');}
+function hideErr(){document.getElementById('errBar').classList.remove('show');}
+
+function showAnalysis(d){
+  const a=d.analysis;
+  document.getElementById('agrid').innerHTML=[['Sujeto',a.subject],['Estilo',a.style],['Mood',a.mood],['Ilum.',a.lighting]].map(([k,v])=>'<div class="aitem"><div class="ak">'+k+'</div><div class="av">'+(v||'—')+'</div></div>').join('');
+  document.getElementById('aprompt').innerHTML='<strong>Prompt →</strong> '+(d.background_prompt||'').slice(0,180)+'…';
+  document.getElementById('abox').classList.add('show');
+}
+
+function swTab(n){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',['img','copy'][i]===n));
+  document.getElementById('tp-img').classList.toggle('on',n==='img');
+  document.getElementById('tp-copy').classList.toggle('on',n==='copy');
+}
+
+// ── CANVAS FINAL ─────────────────────────────────────────────
+async function composeCanvas(bgUrl, agent, ctas, network, zonaProducto, isSecondary){
+  const dims = network==='instagram_45' ? DIMS.instagram_45 : (DIMS[network]||DIMS.instagram);
+  const canvasId = isSecondary ? 'outputCanvas45' : 'outputCanvas';
+  const canvas = document.getElementById(canvasId);
+  canvas.width=dims.w; canvas.height=dims.h;
+  canvas.style.width='100%'; canvas.style.height='auto';
+  const ctx=canvas.getContext('2d'), W=canvas.width, H=canvas.height;
+
+  return new Promise(async(resolve,reject)=>{
+    const bgImg=new Image(); bgImg.crossOrigin='anonymous';
+    bgImg.onload=async()=>{
+      ctx.drawImage(bgImg,0,0,W,H);
+
+      // Zona Producto: pegar foto del producto recortada en la zona marcada
+      if(zonaProducto && photoSrc){
+        try {
+          const cleanSrc = await removeBackground(photoSrc);
+          await new Promise(res=>{
+            const pi=new Image();
+            pi.onload=()=>{
+              const px=zonaProducto.x*W, py=zonaProducto.y*H;
+              const pw=zonaProducto.w*W, ph=zonaProducto.h*H;
+              // Sombra sutil para anclar el producto
+              ctx.save();
+              ctx.shadowColor='rgba(0,0,0,0.4)';
+              ctx.shadowBlur=30; ctx.shadowOffsetY=12;
+              // Mantener proporción dentro de la zona
+              const rat=pi.naturalWidth/pi.naturalHeight;
+              let dw=pw, dh=pw/rat;
+              if(dh>ph){dh=ph; dw=ph*rat;}
+              const dx=px+(pw-dw)/2, dy=py+(ph-dh)/2;
+              ctx.drawImage(pi,dx,dy,dw,dh);
+              ctx.restore();
+              res();
+            };
+            pi.onerror=res; pi.src=cleanSrc;
+          });
+        } catch(e){ console.warn('Error al recortar producto:', e); }
+      }
+
+      const finish=()=>resolve();
+
+      // Logo
+      if(logoSrc){
+        const li=new Image();
+        li.onload=()=>{
+          const lp=agent?.logo_position||agentResult?.logo_position||'top-right';
+          const lW=W*.18, lH=lW*(li.naturalHeight/li.naturalWidth), pad=W*.04;
+          let lx=pad, ly=pad;
+          if(lp.includes('right'))  lx=W-lW-pad;
+          if(lp.includes('bottom')) ly=H-lH-pad;
+          if(lp.includes('center')) lx=(W-lW)/2;
+          ctx.save();
+          ctx.fillStyle='rgba(0,0,0,0.18)';
+          const p=6; ctx.roundRect(lx-p,ly-p,lW+p*2,lH+p*2,6); ctx.fill();
+          ctx.restore();
+          ctx.globalAlpha=.95; ctx.drawImage(li,lx,ly,lW,lH); ctx.globalAlpha=1;
+          finish();
+        };
+        li.onerror=finish; li.src=logoSrc;
+      } else finish();
+    };
+    bgImg.onerror=()=>reject(new Error('No se pudo cargar la imagen de FLUX.'));
+    bgImg.src=bgUrl;
+  });
+}
+
+function renderCopy(d){
+  const items=[{l:'Hook',v:d.hook},{l:'Caption',v:d.caption},{l:'CTA recomendado',v:d.cta_recomendado},{l:'Hashtags',v:d.hashtags&&d.hashtags.length?'#'+d.hashtags.join(' #'):null},{l:'Variacion B',v:d.variacion_b}].filter(i=>i.v);
+  document.getElementById('copyBlocks').innerHTML=items.map((item,i)=>'<div class="cblock"><div class="cblabel">'+item.l+'</div><div class="cbtext" id="ct'+i+'">'+item.v+'</div><button class="cpbtn" onclick="doCopy(this,\'ct'+i+'\')">Copiar</button></div>').join('')+(d.tip?'<div class="tipblock"><span>💡</span><span>'+d.tip+'</span></div>':'');
+}
+function doCopy(btn,id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{btn.textContent='✓';btn.classList.add('ok');setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('ok');},2000);});}
+function dlCanvas(){const c=document.getElementById('outputCanvas');const a=document.createElement('a');a.download=slug+'-'+selNetwork+'.jpg';a.href=c.toDataURL('image/jpeg',.95);a.click();}
+
+async function poll(id){
+  for(let i=0;i<80;i++){
+    await new Promise(r=>setTimeout(r,2500));
+    const res=await fetch('/api/poll/'+id);const data=await res.json();
+    setStep(2,'active','procesando... '+((i+1)*2.5).toFixed(0)+'s');
+    if(data.status==='succeeded')return data;
+    if(data.status==='failed')throw new Error(data.error||'El modelo fallo');
+  }
+  throw new Error('Tiempo de espera agotado');
+}
+
+// ── PIPELINE ─────────────────────────────────────────────────
+// ── FORMATO DE DESCARGA ──────────────────────────────────────
+function setFmt(fmt){
+  dlFormat=fmt;
+  const j=document.getElementById('fmtJpg'), p=document.getElementById('fmtPng');
+  if(fmt==='jpg'){
+    j.style.background='var(--brand)'; j.style.color='var(--brand-btn-text)';
+    p.style.background='transparent';  p.style.color='var(--muted)';
+  } else {
+    p.style.background='var(--brand)'; p.style.color='var(--brand-btn-text)';
+    j.style.background='transparent';  j.style.color='var(--muted)';
+  }
+}
+
+function genFileName(suffix){
+  const titulo = document.getElementById('cta1').value.trim();
+  const boton  = document.getElementById('cta3').value.trim();
+  const base   = [slug, titulo||boton, suffix||selNetwork]
+    .filter(Boolean).join('-')
+    .toLowerCase()
+    .replace(/[áéíóú]/g,c=>({á:'a',é:'e',í:'i',ó:'o',ú:'u'}[c]||c))
+    .replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').slice(0,50);
+  const ts = Date.now().toString().slice(-4);
+  return base + '-' + ts;
+}
+
+function dlCanvas(which){
+  const c = which==='45'
+    ? document.getElementById('outputCanvas45')
+    : document.getElementById('outputCanvas');
+  const a = document.createElement('a');
+  const suffix = which==='45' ? selNetwork+'-45' : selNetwork;
+  a.download = genFileName(suffix) + '.' + dlFormat;
+  a.href = dlFormat==='png' ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', .95);
+  a.click();
+}
+
+// ── RESET / REGENERAR ────────────────────────────────────────
+function nuevaPieza(){
+  // Limpia estado pero mantiene configuración del cliente
+  photo=null; photoSrc=null;
+  logo=null;  logoSrc=null;
+  refImg=null; refSrc=null;
+  zones=[]; renderZones(); updateSummary();
+
+  // Limpia formulario
+  ['cta1','cta2','cta3','userPrompt'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+
+  // Resetea zonas de upload
+  ['photoZone','logoZone','refZone'].forEach(id=>{
+    const z=document.getElementById(id);
+    if(!z) return;
+    z.classList.remove('filled','ref-filled');
+    if(id==='photoZone') z.innerHTML='<input type="file" id="photoInput" accept="image/*" onchange="handleUpload(event,\'photo\')"><span class="upico">📸</span><div class="uphint"><strong>Subir foto</strong><br><span style="font-size:11px">No sera modificada</span></div>';
+    if(id==='logoZone')  z.innerHTML='<input type="file" id="logoInput" accept="image/*" onchange="handleUpload(event,\'logo\')"><span class="upico">🏷️</span><div class="uphint"><strong>Subir logo</strong><br><span style="font-size:11px">PNG recomendado</span></div>';
+    if(id==='refZone')   z.innerHTML='<input type="file" id="refInput" accept="image/*" onchange="handleUpload(event,\'ref\')"><span class="upico">🖼️</span><div class="uphint"><strong class="ref">Subir imagen de referencia</strong><br><span style="font-size:11px">El agente analiza su estilo y paleta</span></div>';
+    z.onclick=()=>document.getElementById(id==='photoZone'?'photoInput':id==='logoZone'?'logoInput':'refInput').click();
+  });
+
+  // Oculta resultado
+  document.getElementById('result').style.display='none';
+  document.getElementById('emptyState').style.display='block';
+  document.getElementById('abox').classList.remove('show');
+  document.getElementById('pipeline').classList.remove('show');
+  hideErr();
+  lastPayload=null; lastAgent=null;
+}
+
+async function regenerar(){
+  if(!lastPayload){ alert('No hay generacion previa para repetir.'); return; }
+  // Reutiliza el mismo payload y agente, solo regenera la imagen
+  const btn=document.getElementById('genBtn');
+  btn.disabled=true; document.getElementById('btnTxt').textContent='Regenerando...';
+  document.getElementById('result').style.display='none';
+  document.getElementById('pipeline').classList.add('show');
+  hideErr(); [1,2,3,4].forEach(n=>setStep(n,'',''));
+  setStep(1,'done','Reutilizando analisis anterior');
+  try {
+    await generarDesdeAgent(lastAgent, lastPayload.ctas, lastPayload.network);
+  } catch(err){
+    showErr(err.message);
+    document.getElementById('emptyState').style.display='block';
+  } finally {
+    btn.disabled=false; document.getElementById('btnTxt').textContent='Generar pieza + copy';
+  }
+}
+
+// ── REMOCIÓN DE FONDO (para zona Producto) ──────────────────
+function removeBackground(imgSrc){
+  return new Promise(resolve=>{
+    const img=new Image();
+    img.onload=()=>{
+      const c=document.createElement('canvas');
+      c.width=img.naturalWidth; c.height=img.naturalHeight;
+      const ctx=c.getContext('2d'); ctx.drawImage(img,0,0);
+      const data=ctx.getImageData(0,0,c.width,c.height), d=data.data;
+      const corners=[[0,0],[c.width-1,0],[0,c.height-1],[c.width-1,c.height-1]].map(([x,y])=>{
+        const i=(y*c.width+x)*4; return [d[i],d[i+1],d[i+2]];
+      });
+      const bgR=Math.round(corners.reduce((a,c)=>a+c[0],0)/4);
+      const bgG=Math.round(corners.reduce((a,c)=>a+c[1],0)/4);
+      const bgB=Math.round(corners.reduce((a,c)=>a+c[2],0)/4);
+      const brightness=(bgR+bgG+bgB)/3;
+      const tol=brightness>200?65:brightness>150?45:30;
+      for(let i=0;i<d.length;i+=4){
+        const dist=Math.sqrt((d[i]-bgR)**2+(d[i+1]-bgG)**2+(d[i+2]-bgB)**2);
+        if(dist<tol) d[i+3]=dist<tol*.5?0:Math.round(((dist-tol*.5)/(tol*.5))*255);
+      }
+      ctx.putImageData(data,0,0);
+      resolve(c.toDataURL('image/png'));
+    };
+    img.onerror=()=>resolve(imgSrc);
+    img.src=imgSrc;
+  });
+}
+
+async function renderCopyAndFinish(agent, ctas, network){
+  setStep(4,'active','generando copy...');
+  const r3=await fetch('/api/generate-copy',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({slug,imageBase64:photo,imageMediaType:photoMime,analysis:agent.analysis,ctas,network})});
+  const copyData=await r3.json();
+  if(!r3.ok) throw new Error(copyData.error||'Error copy');
+  setStep(4,'done','copy listo');
+  renderCopy(copyData);
+  document.getElementById('result').style.display='block'; swTab('img');
+}
+
+async function generarDesdeAgent(agent, ctas, network){
+  const isInstagram = network==='instagram';
+
+  // Para Instagram: genera 1:1 y 4:5 en paralelo
+  const networks = isInstagram ? ['instagram','instagram_45'] : [network];
+
+  setStep(2,'active','FLUX.2 Pro generando' + (isInstagram?' (1:1 + 4:5)':'') + '...');
+
+  const fetches = networks.map(net=>
+    fetch('/api/generate-image',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        prompt:agent.background_prompt,
+        negative_prompt:agent.negative_prompt,
+        network: net==='instagram_45'?'facebook':net, // 4:5 usa mismo ratio que facebook
+        imageBase64:photo, imageMediaType:photoMime
+      })}).then(r=>r.json())
+  );
+
+  const preds = await Promise.all(fetches);
+
+  // Resolver polling si necesario
+  const urls = await Promise.all(preds.map(async(pred,i)=>{
+    if(pred.error) throw new Error(pred.error);
+    if(pred.status==='succeeded') return Array.isArray(pred.output)?pred.output[0]:pred.output;
+    const done = await poll(pred.id);
+    return Array.isArray(done.output)?done.output[0]:done.output;
+  }));
+
+  if(!urls[0]) throw new Error('Replicate no devolvio imagen.');
+  setStep(2,'done', isInstagram?'dos formatos generados':'pieza generada');
+
+  setStep(3,'active','finalizando...');
+
+  // Zona producto definida?
+  const zonaProducto = zones.find(z=>z.type==='producto');
+
+  await composeCanvas(urls[0], agent, ctas, 'instagram', zonaProducto);
+
+  if(isInstagram && urls[1]){
+    await composeCanvas(urls[1], agent, ctas, 'instagram_45', zonaProducto, true);
+    document.getElementById('canvas45Wrap').style.display='block';
+    document.getElementById('dl45Btn').style.display='';
+  } else {
+    document.getElementById('canvas45Wrap').style.display='none';
+    document.getElementById('dl45Btn').style.display='none';
+  }
+
+  setStep(3,'done','pieza lista');
+  await renderCopyAndFinish(agent, ctas, network);
+}
+
+async function runPipeline(){
+  if(!photo){alert('Subi una foto primero.');return;}
+  const ctas=[1,2,3].map(n=>document.getElementById('cta'+n).value.trim()).filter(Boolean);
+  if(!ctas.length){alert('Ingresa al menos un CTA.');return;}
+  const userPrompt=document.getElementById('userPrompt').value.trim();
+  const zonesText=zonesToInstructions();
+
+  const btn=document.getElementById('genBtn');
+  btn.disabled=true; document.getElementById('btnTxt').textContent='Procesando...';
+  document.getElementById('emptyState').style.display='none';
+  document.getElementById('result').style.display='none';
+  document.getElementById('abox').classList.remove('show');
+  document.getElementById('pipeline').classList.add('show');
+  hideErr(); [1,2,3,4].forEach(n=>setStep(n,'',''));
+
+  try{
+    setStep(1,'active', refImg?'analizando foto + referencia...':'analizando con criterio de marca...');
+
+    const payload={
+      slug, imageBase64:photo, imageMediaType:photoMime,
+      logoBase64:logo, logoMediaType:logoMime,
+      ctas, userPrompt:userPrompt+zonesText, network:selNetwork,
+    };
+    if(refImg){ payload.refImageBase64=refImg; payload.refImageMediaType=refMime; }
+
+    const r1=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const agent=await r1.json();
+    if(!r1.ok) throw new Error(agent.error||'Error en el agente');
+    agentResult=agent;
+    lastAgent=agent; lastPayload={ctas, network:selNetwork};
+    setStep(1,'done','Estilo: '+(agent.analysis&&agent.analysis.style||'—')); showAnalysis(agent);
+
+    await generarDesdeAgent(agent, ctas, selNetwork);
+
+  }catch(err){
+    showErr(err.message);
+    [1,2,3,4].forEach(n=>{if(document.getElementById('s'+n).classList.contains('active'))setStep(n,'error');});
+    document.getElementById('emptyState').style.display='block';
+  }finally{
+    btn.disabled=false; document.getElementById('btnTxt').textContent='Generar pieza + copy';
+  }
+}
+</script>
+</body>
+</html>
