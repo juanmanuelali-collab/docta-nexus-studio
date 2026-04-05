@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Creativo IA — Docta Nexus</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Ctext x='50%25' y='50%25' font-size='20' text-anchor='middle' dominant-baseline='central' font-family='serif' font-weight='bold' fill='%23c8f135'%3ED%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0b0d;--s1:#151518;--s2:#1e1e22;--s3:#27272c;
+  --border:#2c2c32;--border2:#3a3a42;
+  --text:#edeef0;--muted:#7a7a88;--muted2:#52525c;
+  --brand:#c8f135;--brand2:#a3c72c;
+  --brand-dim:rgba(200,241,53,.07);--brand-dim2:rgba(200,241,53,.15);
+  --brand-btn-text:#0b0b0d;
+  --purple:#a78cf4;--teal:#3ecfaa;
+  --danger:#f26d6d;--success:#5de8a0;--amber:#f5a623;
+  --r:10px;--rlg:16px;
+  --fs-base:16px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:var(--fs-base);min-height:100vh}
+
+#loader{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.spin-lg{width:32px;height:32px;border:2px solid var(--border2);border-top-color:var(--brand);border-radius:50%;animation:sp .7s linear infinite}
+#loader p{font-size:14px;color:var(--muted)}
+#loader.off{display:none}
+#notfound{display:none;text-align:center;padding:5rem 2rem}
+#notfound h1{font-family:'DM Serif Display',serif;font-size:2.4rem;margin-bottom:1rem}
+#notfound p{color:var(--muted);font-size:15px;line-height:1.8}
+#app{display:none}
+
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(11,11,13,.94);backdrop-filter:blur(14px)}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.hdr-brand{display:flex;flex-direction:column;gap:1px}
+.cname{font-family:'DM Serif Display',serif;font-size:1.4rem;line-height:1.2}
+.cname .sep{font-style:italic;color:var(--muted2);font-size:1.1rem;margin-left:5px}
+.by-docta{font-size:11px;color:var(--muted);font-weight:400;letter-spacing:.02em}
+.by-docta a{color:var(--brand);text-decoration:none;font-weight:500;transition:opacity .2s}
+.by-docta a:hover{opacity:.8}
+.badges{display:flex;gap:7px}
+.bdg{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:20px}
+.bdg-brand{color:var(--brand);background:var(--brand-dim);border:1px solid rgba(200,241,53,.22)}
+.bdg-amber{color:var(--amber);background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.22)}
+
+/* HERO TITLE */
+.hero{max-width:1160px;margin:0 auto;padding:2rem 1.5rem .5rem;display:flex;flex-direction:column;gap:6px}
+.hero h1{font-family:'DM Serif Display',serif;font-size:2rem;line-height:1.2;color:var(--text)}
+.hero h1 span{color:var(--brand)}
+.hero p{font-size:15px;color:var(--muted);line-height:1.6}
+
+/* LAYOUT */
+.wrap{max-width:1160px;margin:0 auto;padding:1.5rem 1.5rem 2rem;display:grid;grid-template-columns:480px 1fr;gap:1.5rem;align-items:start}
+@media(max-width:880px){.wrap{grid-template-columns:1fr}.hdr{padding:1rem}.hero{padding:1.5rem 1rem .5rem}.hero h1{font-size:1.5rem}}
+
+/* CARDS */
+.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--rlg);padding:1.5rem;margin-bottom:1.2rem}
+.card:last-child{margin-bottom:0}
+.clabel{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:7px}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--brand);flex-shrink:0}
+.dot-a{background:var(--amber)}
+.dot-ref{background:var(--purple)}
+
+/* INPUTS */
+input[type=text],textarea,select{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;padding:11px 15px;outline:none;transition:border-color .2s,background .2s}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--brand);background:var(--s3)}
+textarea{resize:vertical;line-height:1.6}
+.field{margin-bottom:.9rem}
+.flabel{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+
+/* GUARANTEE */
+.guarantee{background:rgba(167,140,244,.07);border:1px solid rgba(167,140,244,.2);border-radius:var(--r);padding:11px 15px;font-size:13px;color:var(--purple);line-height:1.6;display:flex;gap:8px;margin-bottom:1rem}
+
+/* UPLOAD */
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.upzone{border:1.5px dashed var(--border2);border-radius:var(--r);background:var(--s2);cursor:pointer;text-align:center;padding:1.4rem 1rem;transition:all .2s;position:relative;overflow:hidden}
+.upzone:hover{border-color:var(--brand);background:var(--brand-dim)}
+.upzone.filled{border-style:solid;border-color:var(--brand);padding:0}
+.upzone.ref-filled{border-color:var(--purple)}
+.upzone input[type=file]{display:none}
+.upzone img{width:100%;display:block;border-radius:calc(var(--r) - 1px)}
+.upzone.pz img{max-height:180px;object-fit:cover}
+.upzone.lz img,.upzone.rz img{max-height:90px;object-fit:contain;padding:8px;background:var(--s2)}
+.uphint{font-size:13px;color:var(--muted);line-height:1.6}
+.uphint strong{color:var(--brand);font-weight:500}
+.uphint strong.ref{color:var(--purple)}
+.upico{font-size:1.6rem;display:block;margin-bottom:5px}
+.rmv{position:absolute;top:6px;right:6px;background:rgba(11,11,13,.85);border:1px solid var(--border2);color:var(--muted);font-size:11px;padding:3px 8px;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.rmv:hover{color:var(--text);border-color:var(--brand)}
+.ref-tag{position:absolute;bottom:6px;left:6px;background:rgba(167,140,244,.2);border:1px solid rgba(167,140,244,.4);color:var(--purple);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;pointer-events:none}
+
+/* CTAs */
+.cta-list{display:flex;flex-direction:column;gap:8px}
+.cta-row{display:flex;align-items:center;gap:10px}
+.cta-n{width:28px;height:28px;border-radius:6px;background:var(--brand-dim2);border:1px solid var(--brand);color:var(--brand);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;flex-direction:column;line-height:1}
+
+/* NETWORK */
+.netgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.netbtn{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:10px 13px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:6px;transition:all .15s}
+.netbtn:hover{border-color:var(--border2);color:var(--text)}
+.netbtn.on{border-color:var(--brand);color:var(--brand);background:var(--brand-dim)}
+.nr{margin-left:auto;font-size:11px;color:var(--muted2)}
+.netbtn.on .nr{color:var(--brand2)}
+
+/* BTN */
+.genbtn{width:100%;background:var(--brand);color:var(--brand-btn-text);border:none;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;padding:15px;cursor:pointer;transition:all .2s;margin-top:1.2rem;display:flex;align-items:center;justify-content:center;gap:8px}
+.genbtn:hover{background:var(--brand2);transform:translateY(-1px)}
+.genbtn:active{transform:translateY(0)}
+.genbtn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* OUTPUT */
+.outcrd{background:var(--s1);border:1px solid var(--border);border-radius:var(--rlg);padding:1.5rem;position:sticky;top:80px}
+
+/* PIPELINE */
+.pipeline{display:none;flex-direction:column;gap:2px;margin-bottom:1.2rem}
+.pipeline.show{display:flex}
+.pstep{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border-radius:8px;font-size:14px;color:var(--muted);transition:all .3s}
+.pstep.active{background:var(--brand-dim);color:var(--text)}
+.pstep.done{color:var(--success)}
+.pstep.error{color:var(--danger)}
+.pico{flex-shrink:0;width:18px;text-anchor:center;margin-top:1px}
+.pdtl{font-size:13px;color:var(--muted2);margin-top:2px}
+.spin{width:13px;height:13px;border:1.5px solid var(--border2);border-top-color:var(--brand);border-radius:50%;animation:sp .7s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ANALYSIS */
+.abox{background:var(--s2);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:var(--r);padding:13px 15px;margin-bottom:1rem;display:none}
+.abox.show{display:block}
+.atitle{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--purple);margin-bottom:8px}
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px}
+.aitem .ak{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.aitem .av{color:var(--text);font-size:13px;margin-top:1px;line-height:1.4}
+.aprompt{font-size:12px;color:var(--muted);line-height:1.6;padding-top:8px;border-top:1px solid var(--border)}
+.aprompt strong{color:var(--teal)}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--s2);border-radius:9px;padding:3px;margin-bottom:1rem}
+.tab{flex:1;text-align:center;padding:8px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;color:var(--muted);transition:all .2s;border:none;background:transparent;font-family:'DM Sans',sans-serif}
+.tab.on{background:var(--s1);color:var(--text)}
+.tpanel{display:none}
+.tpanel.on{display:block}
+
+/* CANVAS */
+.cvwrap{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);margin-bottom:.8rem;background:var(--s2);min-height:80px;display:flex;align-items:center;justify-content:center}
+.cvwrap canvas{width:100%;display:block}
+.dlbtn{width:100%;background:transparent;border:1px solid var(--brand);color:var(--brand);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:10px;cursor:pointer;transition:all .2s}
+.dlbtn:hover{background:var(--brand-dim2)}
+
+/* COPY */
+.cblock{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.2rem;margin-bottom:.6rem;position:relative}
+.cblabel{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:6px}
+.cbtext{font-size:14px;color:var(--text);line-height:1.7;white-space:pre-wrap;padding-right:56px}
+.tipblock{background:var(--brand-dim);border:1px solid rgba(200,241,53,.2);border-radius:var(--r);padding:.75rem 1rem;font-size:13px;color:var(--brand2);line-height:1.6;display:flex;gap:8px}
+.cpbtn{position:absolute;top:9px;right:9px;background:var(--s1);border:1px solid var(--border2);color:var(--muted);font-size:11px;padding:4px 10px;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.cpbtn:hover{color:var(--brand);border-color:var(--brand)}
+.cpbtn.ok{color:var(--success);border-color:var(--success)}
+.empty{text-align:center;padding:3rem 1rem;color:var(--muted)}
+.emico{font-size:2.5rem;display:block;margin-bottom:.8rem}
+.errbar{background:rgba(242,109,109,.1);border:1px solid var(--danger);border-radius:var(--r);padding:11px 15px;font-size:14px;color:var(--danger);margin-bottom:1rem;display:none;line-height:1.5}
+.errbar.show{display:block}
+
+/* ZONES */
+.zones-editor{position:relative;border-radius:var(--r);overflow:hidden;cursor:crosshair;user-select:none}
+.zones-editor canvas{display:block;width:100%}
+.zone-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.75rem;align-items:center}
+.ztool{padding:6px 12px;border-radius:7px;border:1px solid var(--border2);background:var(--s2);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;display:flex;align-items:center;gap:5px}
+.ztool:hover{color:var(--text);border-color:var(--border2)}
+.ztool.active{color:#fff!important;border-color:transparent!important}
+.ztool[data-zone="titulo"].active{background:#3b82f6}
+.ztool[data-zone="promo"].active{background:#8b5cf6}
+.ztool[data-zone="boton"].active{background:#ef4444}
+.ztool[data-zone="prod1"].active{background:#06b6d4}
+.ztool[data-zone="prod2"].active{background:#0891b2}
+.ztool[data-zone="prod3"].active{background:#0e7490}
+.ztool[data-zone="logo"].active{background:#f59e0b}
+.ztool[data-zone="libre"].active{background:#10b981}
+.ztool-clear{margin-left:auto}
+.ztool-clear:hover{border-color:var(--danger)!important;color:var(--danger)!important}
+.zone-hint{font-size:12px;color:var(--muted);margin-top:.6rem;line-height:1.6}
+.zone-hint strong{color:var(--text)}
+.zones-summary{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-top:.75rem;font-size:13px;line-height:2;display:none}
+.zones-summary.show{display:block}
+.zone-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600;margin:2px}
+
+/* FOOTER */
+.app-footer{border-top:1px solid var(--border);padding:2rem 1.5rem;text-align:center;background:var(--s1)}
+.footer-inner{max-width:1160px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:10px}
+.footer-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.footer-logo-mark{width:32px;height:32px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:18px;font-weight:700;color:#0b0b0d}
+.footer-logo-text{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--text)}
+.footer-logo-text span{color:var(--brand)}
+.footer-copy{font-size:12px;color:var(--muted);line-height:1.8}
+.footer-copy a{color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-copy a:hover{color:var(--brand)}
+.footer-copy strong{color:var(--muted2)}
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="spin-lg"></div><p>Cargando agente...</p></div>
+<div id="notfound">
+  <h1>Cliente no encontrado</h1>
+  <p>La URL no corresponde a ningún cliente activo.<br>Verificá el link o contactá a Docta Nexus.</p>
+</div>
+
+<div id="app">
+  <header class="hdr">
+    <div class="hdr-left">
+      <div class="hdr-brand">
+        <div class="cname"><span id="hdrName"></span><span class="sep">Studio</span></div>
+        <div class="by-docta">by <a href="https://doctanexus.com/" target="_blank" rel="noopener">Docta Nexus</a></div>
+      </div>
+    </div>
+    <div class="badges">
+      <div class="bdg bdg-amber">🔒 Foto intacta</div>
+      <div class="bdg bdg-amber">🔒 CTAs exactos</div>
+      <div class="bdg bdg-brand" id="agentBadge">Agente activo</div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Studio Creativo IA — <span>Creá tus piezas para redes</span><br>con Claude &amp; Flux 2 Pro</h1>
+    <p>Generación integral de imágenes publicitarias con inteligencia artificial. Brief de campaña, zonas seguras, múltiples productos y animación de video.</p>
+  </div>
+
+  <div class="wrap">
+    <!-- IZQUIERDA -->
+    <div>
+      <div class="guarantee">
+        <span>🛡️</span>
+        <span>El agente de <strong id="guarName"></strong> nunca modifica tu foto ni los textos de tus CTAs.</span>
+      </div>
+
+      <div class="card">
+        <div class="clabel"><span class="dot"></span>Fotos de producto</div>
+        <!-- Foto 1 — obligatoria -->
+        <div style="margin-bottom:10px">
+          <div class="flabel">Foto 1 — Principal *</div>
+          <div class="upzone pz" id="photoZone0" onclick="document.getElementById('photoInput0').click()">
+            <input type="file" id="photoInput0" accept="image/*" onchange="handlePhotoUpload(event,0)">
+            <span class="upico">📸</span>
+            <div class="uphint"><strong>Subir foto principal</strong><br><span style="font-size:11px">Requerida para generar</span></div>
+          </div>
+        </div>
+        <!-- Fotos 2-5 — opcionales en grilla -->
+        <div class="dual" style="gap:8px">
+          <div>
+            <div class="flabel">Foto 2 <span style="color:var(--muted2)">(opcional)</span></div>
+            <div class="upzone pz" id="photoZone1" onclick="document.getElementById('photoInput1').click()">
+              <input type="file" id="photoInput1" accept="image/*" onchange="handlePhotoUpload(event,1)">
+              <span class="upico" style="font-size:1.1rem">📸</span>
+              <div class="uphint" style="font-size:11px"><strong>Foto 2</strong></div>
+            </div>
+          </div>
+          <div>
+            <div class="flabel">Foto 3 <span style="color:var(--muted2)">(opcional)</span></div>
+            <div class="upzone pz" id="photoZone2" onclick="document.getElementById('photoInput2').click()">
+              <input type="file" id="photoInput2" accept="image/*" onchange="handlePhotoUpload(event,2)">
+              <span class="upico" style="font-size:1.1rem">📸</span>
+              <div class="uphint" style="font-size:11px"><strong>Foto 3</strong></div>
+            </div>
+          </div>
+          <div>
+            <div class="flabel">Foto 4 <span style="color:var(--muted2)">(opcional)</span></div>
+            <div class="upzone pz" id="photoZone3" onclick="document.getElementById('photoInput3').click()">
+              <input type="file" id="photoInput3" accept="image/*" onchange="handlePhotoUpload(event,3)">
+              <span class="upico" style="font-size:1.1rem">📸</span>
+              <div class="uphint" style="font-size:11px"><strong>Foto 4</strong></div>
+            </div>
+          </div>
+          <div>
+            <div class="flabel">Foto 5 <span style="color:var(--muted2)">(opcional)</span></div>
+            <div class="upzone pz" id="photoZone4" onclick="document.getElementById('photoInput4').click()">
+              <input type="file" id="photoInput4" accept="image/*" onchange="handlePhotoUpload(event,4)">
+              <span class="upico" style="font-size:1.1rem">📸</span>
+              <div class="uphint" style="font-size:11px"><strong>Foto 5</strong></div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.7">
+          Con múltiples fotos, Claude compone la pieza integrando todos los productos.<br>
+          Podés marcar zonas <span style="color:#06b6d4;font-weight:600">Prod 1–3</span> en el canvas para controlar la posición exacta de cada uno.
+        </div>
+        <!-- Logo -->
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+          <div class="flabel">Logo <span style="color:var(--muted2)">(opcional)</span></div>
+          <div class="upzone lz" id="logoZone" onclick="document.getElementById('logoInput').click()">
+            <input type="file" id="logoInput" accept="image/*" onchange="handleUpload(event,'logo')">
+            <span class="upico">🏷️</span>
+            <div class="uphint"><strong>Subir logo</strong><br><span style="font-size:11px">PNG recomendado</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMAGEN DE REFERENCIA -->
+      <div class="card">
+        <div class="clabel"><span class="dot dot-ref"></span>Imagen de referencia <span style="color:var(--muted2);font-size:9px;margin-left:4px">(opcional)</span></div>
+        <div class="upzone rz" id="refZone" onclick="document.getElementById('refInput').click()">
+          <input type="file" id="refInput" accept="image/*" onchange="handleUpload(event,'ref')">
+          <span class="upico">🖼️</span>
+          <div class="uphint">
+            <strong class="ref">Subir imagen de referencia</strong><br>
+            <span style="font-size:11px">El agente analiza su estilo, composición y paleta<br>para inspirarse al generar el prompt</span>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.7">
+          Podés subir una pieza que te gustó, un anuncio de referencia, un moodboard o cualquier imagen cuyo estilo quieras replicar.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="clabel"><span class="dot"></span>Descripción creativa</div>
+        <textarea id="userPrompt" style="height:80px" placeholder="Describí la pieza: tono, estética, qué querés transmitir..."></textarea>
+      </div>
+
+      <div class="card">
+        <div class="clabel"><span class="dot-a dot"></span>Textos de la pieza — exactos e inmutables</div>
+        <div class="cta-list">
+          <div class="cta-row">
+            <span class="cta-n" style="background:rgba(59,130,246,.2);border-color:#3b82f6;color:#3b82f6;font-size:9px;width:28px;height:28px;border-radius:6px;flex-direction:column;gap:0;line-height:1">T</span>
+            <div style="flex:1">
+              <div class="flabel" style="margin-bottom:3px">Título</div>
+              <input type="text" id="cta1" placeholder="Ej: Nueva Temporada Invierno" oninput="renderZones()">
+            </div>
+          </div>
+          <div class="cta-row">
+            <span class="cta-n" style="background:rgba(139,92,246,.2);border-color:#8b5cf6;color:#8b5cf6;font-size:9px;width:28px;height:28px;border-radius:6px;flex-direction:column;gap:0;line-height:1">P</span>
+            <div style="flex:1">
+              <div class="flabel" style="margin-bottom:3px">Promo</div>
+              <input type="text" id="cta2" placeholder="Ej: 6 Cuotas Sin Interés · Envío Gratis" oninput="renderZones()">
+            </div>
+          </div>
+          <div class="cta-row">
+            <span class="cta-n" style="background:rgba(239,68,68,.2);border-color:#ef4444;color:#ef4444;font-size:9px;width:28px;height:28px;border-radius:6px;flex-direction:column;gap:0;line-height:1">B</span>
+            <div style="flex:1">
+              <div class="flabel" style="margin-bottom:3px">Botón CTA</div>
+              <input type="text" id="cta3" placeholder="Ej: Comprar Ahora" oninput="renderZones()">
+            </div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.7">
+          ⚠️ Estos textos aparecen <strong style="color:var(--amber)">exactamente</strong> como los escribís.
+          Marcá las zonas en el canvas de la derecha para indicar dónde va cada uno.
+        </div>
+      </div>
+
+      <!-- BRIEF DE CAMPAÑA -->
+      <div class="card" id="briefCard">
+        <div class="clabel" style="cursor:pointer;justify-content:space-between" onclick="toggleBrief()">
+          <div style="display:flex;align-items:center;gap:7px"><span class="dot" style="background:var(--amber)"></span>Brief de campaña <span style="color:var(--muted2);font-size:9px;margin-left:4px">(opcional)</span></div>
+          <span id="briefArrow" style="color:var(--muted);font-size:12px;transition:transform .2s">▼</span>
+        </div>
+        <div id="briefBody" style="display:none">
+          <div class="field">
+            <label class="flabel">Nombre de la campaña</label>
+            <input type="text" id="briefNombre" placeholder="Ej: Colección Otoño Invierno 2025">
+          </div>
+          <div class="field">
+            <label class="flabel">Concepto creativo y tono</label>
+            <textarea id="briefConcepto" style="height:72px" placeholder="Ej: Mujer urbana 25-35 años, profesional y moderna. Tono aspiracional pero accesible. Mood oscuro y elegante con toques dorados."></textarea>
+          </div>
+          <div class="field">
+            <label class="flabel">Estilo visual</label>
+            <textarea id="briefEstilo" style="height:60px" placeholder="Ej: Fotografía editorial de revista, iluminación dramática, interiores lujosos, paleta negros y bordós."></textarea>
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <label class="flabel">Qué NO querés</label>
+            <input type="text" id="briefNo" placeholder="Ej: Sin fondos blancos, sin estética sport, sin colores brillantes">
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.7;background:var(--brand-dim);border:1px solid rgba(200,241,53,.15);border-radius:8px;padding:8px 10px">
+            ✦ Claude usará este brief en <strong style="color:var(--brand)">cada generación</strong> para mantener coherencia visual en toda la campaña.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="clabel"><span class="dot"></span>Formato de salida</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <button class="netbtn on" data-net="feed_1x1" data-w="1080" data-h="1080" onclick="selNet(this)">
+            <span style="font-size:13px">▪</span> Feed Cuadrado <span class="nr">1080×1080</span>
+          </button>
+          <button class="netbtn" data-net="feed_4x5" data-w="1080" data-h="1350" onclick="selNet(this)">
+            <span style="font-size:13px">▬</span> Feed Vertical <span class="nr">1080×1350</span>
+          </button>
+          <button class="netbtn" data-net="stories" data-w="1080" data-h="1920" onclick="selNet(this)">
+            <span style="font-size:13px">▮</span> Stories / Reels <span class="nr">1080×1920</span>
+          </button>
+          <button class="netbtn" data-net="carrusel" data-w="1080" data-h="1440" onclick="selNet(this)">
+            <span style="font-size:13px">◫</span> Carrusel <span class="nr">1080×1440</span>
+          </button>
+        </div>
+        <button class="genbtn" id="genBtn" onclick="runPipeline()">
+          <span>✦</span><span id="btnTxt">Generar pieza + copy</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- DERECHA -->
+    <div>
+      <!-- EDITOR ZONAS SEGURAS -->
+      <div class="card" style="margin-bottom:1.2rem">
+        <div class="clabel"><span class="dot dot-ref"></span>Editor de zonas seguras</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:.75rem;line-height:1.7">
+          Seleccioná el tipo de zona y <strong style="color:var(--text)">arrastrá</strong> sobre el canvas.<br>
+          Las zonas <span style="color:#3b82f6;font-weight:600">Título</span>, <span style="color:#8b5cf6;font-weight:600">Promo</span> y <span style="color:#ef4444;font-weight:600">Botón CTA</span> muestran el texto real del campo correspondiente.
+        </div>
+        <div class="zone-toolbar">
+          <button class="ztool active" data-zone="titulo" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#3b82f6;border-radius:2px"></span>T — Título
+          </button>
+          <button class="ztool" data-zone="promo" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#8b5cf6;border-radius:2px"></span>P — Promo
+          </button>
+          <button class="ztool" data-zone="boton" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#ef4444;border-radius:2px"></span>B — Botón CTA
+          </button>
+          <button class="ztool" data-zone="prod1" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#06b6d4;border-radius:2px"></span>Prod 1
+          </button>
+          <button class="ztool" data-zone="prod2" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#0891b2;border-radius:2px"></span>Prod 2
+          </button>
+          <button class="ztool" data-zone="prod3" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#0e7490;border-radius:2px"></span>Prod 3
+          </button>
+          <button class="ztool" data-zone="logo" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#f59e0b;border-radius:2px"></span>Logo
+          </button>
+          <button class="ztool" data-zone="libre" onclick="selZoneTool(this)">
+            <span style="display:inline-block;width:10px;height:10px;background:#10b981;border-radius:2px"></span>Libre
+          </button>
+          <button class="ztool ztool-clear" onclick="clearAllZones()">✕ Limpiar</button>
+        </div>
+        <div class="zones-editor" id="zonesEditor">
+          <canvas id="zonesCanvas"></canvas>
+        </div>
+        <div class="zone-hint">
+          Seleccioná un tipo arriba y <strong>arrastrá</strong> sobre el canvas para marcar la zona.
+          El agente recibirá estas instrucciones al generar el prompt.
+        </div>
+        <div class="zones-summary" id="zonesSummary"></div>
+      </div>
+
+      <!-- OUTPUT -->
+      <div class="outcrd">
+        <div class="clabel"><span class="dot"></span>Output</div>
+        <div class="errbar" id="errBar"></div>
+
+        <!-- Pipeline imagen -->
+        <div class="pipeline" id="pipeline">
+          <div class="pstep" id="s1"><span class="pico" id="i1">🔍</span><div><div>Agente analiza foto y referencia</div><div class="pdtl" id="d1"></div></div></div>
+          <div class="pstep" id="s2"><span class="pico" id="i2">🎨</span><div><div>FLUX.2 Pro genera la pieza completa</div><div class="pdtl" id="d2"></div></div></div>
+          <div class="pstep" id="s3"><span class="pico" id="i3">🖼️</span><div><div>Finalizando composición</div><div class="pdtl" id="d3"></div></div></div>
+          <div class="pstep" id="s4"><span class="pico" id="i4">✍️</span><div><div>Copy con voz de la marca</div><div class="pdtl" id="d4"></div></div></div>
+        </div>
+
+        <!-- Pipeline video -->
+        <div class="pipeline" id="videoPipeline">
+          <div class="pstep" id="v1"><span class="pico" id="vi1">🎬</span><div><div>Claude genera prompt de movimiento</div><div class="pdtl" id="vd1"></div></div></div>
+          <div class="pstep" id="v2"><span class="pico" id="vi2">☁️</span><div><div>Subiendo imagen a Replicate</div><div class="pdtl" id="vd2"></div></div></div>
+          <div class="pstep" id="v3"><span class="pico" id="vi3">▶</span><div><div>Kling v2.1 animando la pieza</div><div class="pdtl" id="vd3"></div></div></div>
+          <div class="pstep" id="v4"><span class="pico" id="vi4">✅</span><div><div>Video listo</div><div class="pdtl" id="vd4"></div></div></div>
+        </div>
+        <div class="abox" id="abox">
+          <div class="atitle">✦ Análisis del agente</div>
+          <div class="agrid" id="agrid"></div>
+          <div class="aprompt" id="aprompt"></div>
+        </div>
+        <div class="empty" id="emptyState">
+          <span class="emico">🎨</span>
+          <div style="font-size:14px;line-height:1.8">Subí tu foto, marcá las zonas seguras<br>y hacé clic en <strong style="color:var(--brand)">Generar pieza</strong></div>
+        </div>
+        <div id="result" style="display:none">
+          <div class="tabs">
+            <button class="tab on" onclick="swTab('img')">Pieza final</button>
+            <button class="tab" onclick="swTab('copy')">Copy para redes</button>
+          </div>
+          <div class="tpanel on" id="tp-img">
+            <!-- Canvas principal -->
+            <div class="cvwrap"><canvas id="outputCanvas"></canvas></div>
+            <!-- Acciones -->
+            <div style="margin-top:.8rem;display:flex;flex-direction:column;gap:8px">
+              <!-- Selector formato + descarga -->
+              <div style="display:flex;gap:8px;align-items:center">
+                <div style="display:flex;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;flex-shrink:0">
+                  <button id="fmtJpg" onclick="setFmt('jpg')" style="padding:8px 14px;font-size:12px;font-weight:600;font-family:inherit;border:none;cursor:pointer;background:var(--brand);color:var(--brand-btn-text);transition:all .2s">JPG</button>
+                  <button id="fmtPng" onclick="setFmt('png')" style="padding:8px 14px;font-size:12px;font-weight:600;font-family:inherit;border:none;cursor:pointer;background:transparent;color:var(--muted);transition:all .2s">PNG</button>
+                </div>
+                <button class="dlbtn" style="flex:1;margin:0" onclick="dlCanvas('main')">⬇ Descargar pieza</button>
+              </div>
+              <!-- Regenerar / Nueva pieza -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <button onclick="regenerar()" style="padding:9px;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px" onmouseover="this.style.borderColor='var(--brand)'" onmouseout="this.style.borderColor='var(--border2)'">
+                  🔄 Regenerar
+                </button>
+                <button onclick="nuevaPieza()" style="padding:9px;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);color:var(--muted);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px" onmouseover="this.style.borderColor='var(--danger)';this.style.color='var(--danger)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">
+                  ✕ Nueva pieza
+                </button>
+              </div>
+              <!-- Generar video -->
+              <button id="videoBtn" onclick="generarVideo()" style="width:100%;padding:11px;background:linear-gradient(135deg,#7c3aed,#4f46e5);border:none;border-radius:var(--r);color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+                <span>▶</span><span id="videoBtnTxt">Animar pieza — Generar video</span>
+              </button>
+              <!-- Resultado del video -->
+              <div id="videoResult" style="display:none">
+                <div style="font-size:11px;color:var(--muted);margin:.4rem 0 .3rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em">Video generado</div>
+                <video id="videoPlayer" controls style="width:100%;border-radius:var(--r);border:1px solid var(--border);background:#000"></video>
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <button onclick="dlVideo()" class="dlbtn" style="margin:0;flex:1">⬇ Descargar video MP4</button>
+                  <button onclick="document.getElementById('videoResult').style.display='none'" style="padding:9px 14px;background:transparent;border:1px solid var(--border2);border-radius:var(--r);color:var(--muted);font-family:inherit;font-size:13px;cursor:pointer">✕</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tpanel" id="tp-copy">
+            <div id="copyBlocks"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <a href="https://doctanexus.com/" target="_blank" rel="noopener" class="footer-logo">
+        <div class="footer-logo-mark">D</div>
+        <div class="footer-logo-text">Docta<span>Nexus</span></div>
+      </a>
+      <div class="footer-copy">
+        <strong>Studio Creativo IA</strong> es propiedad intelectual de
+        <a href="https://doctanexus.com/" target="_blank" rel="noopener">Docta Nexus</a>.<br>
+        &copy; <span id="footerYear"></span> Docta Nexus — Todos los derechos reservados.
+        Prohibida su reproducción o distribución sin autorización.
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /app -->
+
+<script>
+document.getElementById('footerYear').textContent = new Date().getFullYear();
+// ── ESTADO ─────────────────────────────────────────────────
+let slug=null, meta=null;
+// Array de 5 fotos: [{data, mime, src}] — índice 0 es la principal
+let photos = [null, null, null, null, null];
+let logo=null, logoMime='image/png', logoSrc=null;
+let refImg=null, refMime='image/jpeg', refSrc=null;
+let selNetwork='feed_1x1', agentResult=null;
+let dlFormat='jpg';
+let lastPayload=null, lastAgent=null;
+
+// Helpers para foto principal (compatibilidad con código existente)
+const getPhoto    = () => photos[0]?.data || null;
+const getPhotoMime= () => photos[0]?.mime || 'image/jpeg';
+const getPhotoSrc = () => photos[0]?.src  || null;
+
+const DIMS={
+  feed_1x1: {w:1080,h:1080,  label:'Feed Cuadrado'},
+  feed_4x5: {w:1080,h:1350,  label:'Feed Vertical'},
+  stories:  {w:1080,h:1920,  label:'Stories'},
+  carrusel: {w:1080,h:1440,  label:'Carrusel'},
+};
+
+const ASPECT_RATIOS_NET={
+  feed_1x1:'1:1', feed_4x5:'4:5', stories:'9:16', carrusel:'3:4'
+};
+
+// ── ZONAS SEGURAS ───────────────────────────────────────────
+const ZONE_CFG={
+  titulo:  {fill:'rgba(59,130,246,.22)',  stroke:'#3b82f6', label:'Titulo'},
+  promo:   {fill:'rgba(139,92,246,.22)',  stroke:'#8b5cf6', label:'Promo'},
+  boton:   {fill:'rgba(239,68,68,.22)',   stroke:'#ef4444', label:'Boton CTA'},
+  prod1:   {fill:'rgba(6,182,212,.22)',   stroke:'#06b6d4', label:'Prod 1'},
+  prod2:   {fill:'rgba(8,145,178,.22)',   stroke:'#0891b2', label:'Prod 2'},
+  prod3:   {fill:'rgba(14,116,144,.22)',  stroke:'#0e7490', label:'Prod 3'},
+  logo:    {fill:'rgba(245,158,11,.22)',  stroke:'#f59e0b', label:'Logo'},
+  libre:   {fill:'rgba(16,185,129,.22)',  stroke:'#10b981', label:'Zona libre'},
+};
+
+let zones=[], activeZone='titulo', drawing=false, drawStart=null;
+let zCvs, zCtx, zW, zH;
+
+function initZonesEditor(){
+  zCvs=document.getElementById('zonesCanvas');
+  zCtx=zCvs.getContext('2d');
+  resizeZones();
+
+  zCvs.addEventListener('mousedown', e=>{ drawing=true; drawStart=zPos(e); });
+  zCvs.addEventListener('mousemove', e=>{ if(!drawing)return; renderZones(zPos(e)); });
+  zCvs.addEventListener('mouseup',   e=>{ if(!drawing)return; drawing=false; addZone(zPos(e)); });
+  zCvs.addEventListener('mouseleave',()=>{ if(drawing){drawing=false; renderZones();} });
+
+  zCvs.addEventListener('touchstart', e=>{ e.preventDefault(); drawing=true; drawStart=zPos(e.touches[0]); },{passive:false});
+  zCvs.addEventListener('touchmove',  e=>{ e.preventDefault(); if(drawing) renderZones(zPos(e.touches[0])); },{passive:false});
+  zCvs.addEventListener('touchend',   e=>{ e.preventDefault(); if(drawing){drawing=false;addZone(zPos(e.changedTouches[0]));} },{passive:false});
+
+  // Click para borrar zona (hit en el ✕)
+  zCvs.addEventListener('click', e=>{
+    if(drawing) return;
+    const p=zPos(e);
+    for(let i=zones.length-1;i>=0;i--){
+      const z=zones[i];
+      const bx=(z.x+z.w)*zW-18, by=z.y*zH+2;
+      if(Math.hypot(p.x-(bx+8), p.y-(by+8))<10){
+        zones.splice(i,1); renderZones(); updateSummary(); return;
+      }
+    }
+  });
+}
+
+function resizeZones(){
+  const dims=DIMS[selNetwork]||DIMS.feed_1x1;
+  const W=zCvs.parentElement.clientWidth||420;
+  zCvs.width=W; zCvs.height=Math.round(W*(dims.h/dims.w));
+  zW=zCvs.width; zH=zCvs.height;
+  renderZones();
+}
+
+function zPos(e){
+  const r=zCvs.getBoundingClientRect();
+  return { x:(e.clientX-r.left)*(zW/r.width), y:(e.clientY-r.top)*(zH/r.height) };
+}
+
+function addZone(p){
+  const w=Math.abs(p.x-drawStart.x), h=Math.abs(p.y-drawStart.y);
+  if(w>12&&h>12){
+    zones.push({
+      type:activeZone,
+      x:Math.min(drawStart.x,p.x)/zW, y:Math.min(drawStart.y,p.y)/zH,
+      w:w/zW, h:h/zH
+    });
+  }
+  renderZones(); updateSummary();
+}
+
+// Mapa de zona → id del campo de texto
+const ZONE_FIELD={titulo:'cta1', promo:'cta2', boton:'cta3'};
+
+function getZoneText(type){
+  const fieldId=ZONE_FIELD[type];
+  if(!fieldId) return null;
+  return document.getElementById(fieldId)?.value.trim()||null;
+}
+
+function renderZones(cursor){
+  zCtx.clearRect(0,0,zW,zH);
+  // Fondo
+  zCtx.fillStyle='#1a1a1e'; zCtx.fillRect(0,0,zW,zH);
+  // Cuadricula
+  zCtx.strokeStyle='rgba(255,255,255,.05)'; zCtx.lineWidth=1;
+  const g=zW/6;
+  for(let x=g;x<zW;x+=g){zCtx.beginPath();zCtx.moveTo(x,0);zCtx.lineTo(x,zH);zCtx.stroke();}
+  const gH=zW/6*(DIMS[selNetwork]||DIMS.feed_1x1).h/(DIMS[selNetwork]||DIMS.feed_1x1).w;
+  for(let y=gH;y<zH;y+=gH){zCtx.beginPath();zCtx.moveTo(0,y);zCtx.lineTo(zW,y);zCtx.stroke();}
+  // Label formato
+  zCtx.fillStyle='rgba(255,255,255,.12)'; zCtx.font='11px DM Sans,sans-serif';
+  zCtx.textAlign='right'; zCtx.fillText(selNetwork.replace('_',' '),zW-8,zH-8);
+
+  // Zonas guardadas
+  zones.forEach(z=>{
+    const c=ZONE_CFG[z.type];
+    const px=z.x*zW, py=z.y*zH, pw=z.w*zW, ph=z.h*zH;
+
+    // Fondo de la zona
+    zCtx.fillStyle=c.fill;
+    zCtx.strokeStyle=c.stroke;
+    zCtx.lineWidth=1.5;
+    zCtx.setLineDash([]);
+    zCtx.fillRect(px,py,pw,ph);
+    zCtx.strokeRect(px,py,pw,ph);
+
+    // Texto real del campo (si existe) o label del tipo
+    const realText=getZoneText(z.type);
+    const centY=py+ph/2;
+
+    if(realText && ph>28){
+      // Mostrar el texto real centrado en la zona
+      const maxFontSize=Math.min(ph*0.28, pw*0.08, 18);
+      const fontSize=Math.max(maxFontSize, 10);
+      zCtx.font='600 '+fontSize+'px DM Sans,sans-serif';
+      zCtx.fillStyle='rgba(255,255,255,.95)';
+      zCtx.textAlign='center';
+      zCtx.textBaseline='middle';
+      // Truncar si es muy largo
+      let txt=realText;
+      while(zCtx.measureText(txt).width>pw-12 && txt.length>3) txt=txt.slice(0,-1);
+      if(txt!==realText) txt=txt.slice(0,-1)+'…';
+      zCtx.fillText(txt, px+pw/2, centY);
+      // Label tipo arriba a la izquierda (pequeño)
+      zCtx.font='bold 9px DM Sans,sans-serif';
+      zCtx.fillStyle=c.stroke;
+      zCtx.textAlign='left';
+      zCtx.textBaseline='top';
+      zCtx.fillText(c.label.toUpperCase(), px+5, py+4);
+    } else {
+      // Sin texto real: mostrar solo el label del tipo centrado
+      zCtx.font='bold 11px DM Sans,sans-serif';
+      zCtx.fillStyle=c.stroke;
+      zCtx.textAlign='left';
+      zCtx.textBaseline='top';
+      zCtx.fillText(c.label, px+6, py+5);
+    }
+
+    // Botón borrar (esquina superior derecha)
+    const bx=px+pw-18, by=py+2;
+    zCtx.fillStyle='rgba(0,0,0,.55)';
+    zCtx.beginPath(); zCtx.arc(bx+8,by+8,8,0,Math.PI*2); zCtx.fill();
+    zCtx.fillStyle='#fff';
+    zCtx.font='bold 10px DM Sans,sans-serif';
+    zCtx.textAlign='center';
+    zCtx.textBaseline='middle';
+    zCtx.fillText('x', bx+8, by+8);
+  });
+
+  // Preview al dibujar
+  if(cursor&&drawing&&drawStart){
+    const c=ZONE_CFG[activeZone];
+    const px=Math.min(drawStart.x,cursor.x), py=Math.min(drawStart.y,cursor.y);
+    const pw=Math.abs(cursor.x-drawStart.x), ph=Math.abs(cursor.y-drawStart.y);
+    zCtx.fillStyle=c.fill; zCtx.strokeStyle=c.stroke; zCtx.lineWidth=2;
+    zCtx.setLineDash([5,4]); zCtx.fillRect(px,py,pw,ph); zCtx.strokeRect(px,py,pw,ph);
+    zCtx.setLineDash([]);
+  }
+  zCtx.textAlign='left'; zCtx.textBaseline='alphabetic';
+}
+
+function selZoneTool(btn){
+  document.querySelectorAll('.ztool[data-zone]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); activeZone=btn.dataset.zone;
+}
+
+function clearAllZones(){ zones=[]; renderZones(); updateSummary(); }
+
+function updateSummary(){
+  const el=document.getElementById('zonesSummary');
+  if(!zones.length){el.classList.remove('show');return;}
+  const counts={};
+  zones.forEach(z=>counts[z.type]=(counts[z.type]||0)+1);
+  el.innerHTML='<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Zonas marcadas: </span>'+
+    Object.entries(counts).map(([t,n])=>{
+      const c=ZONE_CFG[t];
+      const txt=getZoneText(t);
+      const preview=txt?' — "'+txt.slice(0,20)+(txt.length>20?'…':'')+'"':'';
+      return '<span class="zone-pill" style="background:'+c.fill+';border:1px solid '+c.stroke+';color:'+c.stroke+'">'+c.label+' x'+n+preview+'</span>';
+    }).join('');
+  el.classList.add('show');
+}
+
+function zonesToInstructions(){
+  if(!zones.length) return '';
+  const lines=zones.map(z=>{
+    const c=ZONE_CFG[z.type];
+    const x1=Math.round(z.x*100), y1=Math.round(z.y*100);
+    const x2=Math.round((z.x+z.w)*100), y2=Math.round((z.y+z.h)*100);
+    const hPos=((x1+x2)/2)<33?'izquierda':((x1+x2)/2)>66?'derecha':'centro';
+    const vPos=((y1+y2)/2)<33?'superior':((y1+y2)/2)>66?'inferior':'medio';
+    const realText=getZoneText(z.type);
+    const textNote=realText?' — texto exacto a respetar: "'+realText+'"':'';
+    return '- '+c.label+textNote+': zona '+vPos+' '+hPos+' ('+x1+'%-'+x2+'% horizontal, '+y1+'%-'+y2+'% vertical). Dejar visualmente libre con fondo neutro para que el texto sea legible.';
+  });
+  return '\n\nZONAS SEGURAS CON TEXTOS EXACTOS (respetar en la composicion):\n'+lines.join('\n')+'\nIMPORTANTE: en estas zonas el fondo debe ser neutro, oscuro suave o con gradiente para que los textos indicados sean perfectamente legibles.';
+}
+
+// ── INIT ────────────────────────────────────────────────────
+function hexRgba(hex,a){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return 'rgba('+r+','+g+','+b+','+a+')';}
+
+function applyBranding(m){
+  const r=document.documentElement;
+  r.style.setProperty('--brand',m.colorPrimary);
+  r.style.setProperty('--brand2',m.colorAccent);
+  r.style.setProperty('--brand-dim',hexRgba(m.colorPrimary,.07));
+  r.style.setProperty('--brand-dim2',hexRgba(m.colorPrimary,.15));
+  r.style.setProperty('--brand-btn-text',m.colorBtnText);
+  document.title=m.name+' — Studio';
+  document.getElementById('hdrName').textContent=m.name;
+  document.getElementById('guarName').textContent=m.name;
+  document.getElementById('agentBadge').textContent='Agente '+m.name;
+}
+
+function detectSlug(){
+  const p=window.location.pathname.replace(/^\/+|\/+$/g,'');
+  if(p) return p;
+  return new URLSearchParams(window.location.search).get('client');
+}
+
+async function init(){
+  const s=detectSlug();
+  if(!s){document.getElementById('loader').classList.add('off');document.getElementById('notfound').style.display='block';return;}
+  try{
+    const res=await fetch('/api/client/'+s);
+    if(!res.ok) throw new Error();
+    meta=await res.json(); slug=s;
+    applyBranding(meta);
+    document.getElementById('loader').classList.add('off');
+    document.getElementById('app').style.display='block';
+    setTimeout(initZonesEditor,60);
+  }catch{
+    document.getElementById('loader').classList.add('off');
+    document.getElementById('notfound').style.display='block';
+  }
+}
+init();
+
+// ── UPLOADS ─────────────────────────────────────────────────
+function handlePhotoUpload(e, idx){
+  const file=e.target.files[0]; if(!file) return;
+  if(file.size>15*1024*1024){alert('Archivo supera 15 MB.');return;}
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const src=ev.target.result;
+    photos[idx]={data:src.split(',')[1], mime:file.type||'image/jpeg', src};
+    fillPhotoZone(idx, src);
+  };
+  reader.readAsDataURL(file);
+}
+
+function fillPhotoZone(idx, src){
+  const z=document.getElementById('photoZone'+idx);
+  if(!z) return;
+  z.classList.add('filled');
+  z.innerHTML='<img src="'+src+'" alt="" style="max-height:120px;object-fit:cover"><button class="rmv" onclick="clearPhotoZone(event,'+idx+')">✕</button>';
+}
+
+function clearPhotoZone(e, idx){
+  e.stopPropagation();
+  photos[idx]=null;
+  const z=document.getElementById('photoZone'+idx);
+  if(!z) return;
+  z.classList.remove('filled');
+  const label = idx===0 ? '<strong>Subir foto principal</strong><br><span style="font-size:11px">Requerida para generar</span>' : '<strong>Foto '+(idx+1)+'</strong>';
+  z.innerHTML='<input type="file" id="photoInput'+idx+'" accept="image/*" onchange="handlePhotoUpload(event,'+idx+')"><span class="upico" style="font-size:'+(idx===0?'1.5':'1.1')+'rem">📸</span><div class="uphint">'+label+'</div>';
+  z.onclick=()=>document.getElementById('photoInput'+idx).click();
+}
+
+function handleUpload(e,type){
+  const file=e.target.files[0]; if(!file) return;
+  if(file.size>15*1024*1024){alert('Archivo supera 15 MB.');return;}
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const src=ev.target.result;
+    if(type==='logo'){logo=src.split(',')[1];logoMime=file.type||'image/png';logoSrc=src;fillUpZone('logoZone',src,'logo');}
+    else if(type==='ref'){refImg=src.split(',')[1];refMime=file.type||'image/jpeg';refSrc=src;fillRefZone(src);}
+  };
+  reader.readAsDataURL(file);
+}
+
+function fillUpZone(id,src,type){
+  const z=document.getElementById(id); z.classList.add('filled');
+  z.innerHTML='<img src="'+src+'" alt=""><button class="rmv" onclick="clearUpZone(event,\''+type+'\')">✕</button>';
+}
+
+function clearUpZone(e,type){
+  e.stopPropagation();
+  if(type==='logo'){logo=null;logoSrc=null;}
+  const z=document.getElementById('logoZone'); z.classList.remove('filled');
+  z.innerHTML='<input type="file" id="logoInput" accept="image/*" onchange="handleUpload(event,\'logo\')"><span class="upico">🏷️</span><div class="uphint"><strong>Subir logo</strong><br><span style="font-size:11px">PNG recomendado</span></div>';
+  z.onclick=()=>document.getElementById('logoInput').click();
+}
+  z.classList.add('filled','ref-filled');
+  z.innerHTML='<img src="'+src+'" alt=""><button class="rmv" onclick="clearRefZone(event)">✕</button><span class="ref-tag">Referencia</span>';
+}
+
+function clearRefZone(e){
+  e.stopPropagation(); refImg=null; refSrc=null;
+  const z=document.getElementById('refZone'); z.classList.remove('filled','ref-filled');
+  z.innerHTML='<input type="file" id="refInput" accept="image/*" onchange="handleUpload(event,\'ref\')"><span class="upico">🖼️</span><div class="uphint"><strong class="ref">Subir imagen de referencia</strong><br><span style="font-size:11px">El agente analiza su estilo, composicion y paleta</span></div>';
+  z.onclick=()=>document.getElementById('refInput').click();
+}
+
+function clearUpZone(e,type){
+  e.stopPropagation();
+  if(type==='photo'){photo=null;photoSrc=null;}else{logo=null;logoSrc=null;}
+  const ip=type==='photo';
+  const id=ip?'photoZone':'logoZone', ico=ip?'📸':'🏷️';
+  const txt=ip?'<strong>Subir foto</strong><br><span style="font-size:11px">No sera modificada</span>':'<strong>Subir logo</strong><br><span style="font-size:11px">PNG recomendado</span>';
+  const z=document.getElementById(id); z.classList.remove('filled');
+  z.innerHTML='<input type="file" id="'+(ip?'photoInput':'logoInput')+'" accept="image/*" onchange="handleUpload(event,\''+type+'\')"><span class="upico">'+ico+'</span><div class="uphint">'+txt+'</div>';
+  z.onclick=()=>document.getElementById(ip?'photoInput':'logoInput').click();
+}
+
+const pz=document.getElementById('photoZone');
+pz.addEventListener('dragover',e=>{e.preventDefault();pz.style.borderColor='var(--brand)';});
+pz.addEventListener('dragleave',()=>pz.style.borderColor='');
+pz.addEventListener('drop',e=>{e.preventDefault();pz.style.borderColor='';const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))handleUpload({target:{files:[f]}},'photo');});
+
+// ── RED SOCIAL ───────────────────────────────────────────────
+function selNet(btn){
+  document.querySelectorAll('.netbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  selNetwork=btn.dataset.net;
+  if(zCvs) resizeZones();
+}
+
+// ── BRIEF DE CAMPAÑA ─────────────────────────────────────────
+function toggleBrief(){
+  const body=document.getElementById('briefBody');
+  const arrow=document.getElementById('briefArrow');
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  arrow.style.transform=open?'rotate(180deg)':'rotate(0deg)';
+}
+
+function getBrief(){
+  const nombre   = (document.getElementById('briefNombre')?.value||'').trim();
+  const concepto = (document.getElementById('briefConcepto')?.value||'').trim();
+  const estilo   = (document.getElementById('briefEstilo')?.value||'').trim();
+  const no       = (document.getElementById('briefNo')?.value||'').trim();
+  if(!nombre && !concepto && !estilo && !no) return '';
+  let brief = '\n\n=== BRIEF DE CAMPAÑA (respetar en TODAS las piezas) ===\n';
+  if(nombre)   brief += 'Campaña: ' + nombre + '\n';
+  if(concepto) brief += 'Concepto/Tono: ' + concepto + '\n';
+  if(estilo)   brief += 'Estilo visual: ' + estilo + '\n';
+  if(no)       brief += 'Evitar: ' + no + '\n';
+  brief += '=== FIN BRIEF ===';
+  return brief;
+}
+
+// ── VIDEO PIPELINE STEPS ─────────────────────────────────────
+const defVIco={1:'🎬',2:'☁️',3:'▶',4:'✅'};
+function setVideoStep(n,status,detail){
+  const el=document.getElementById('v'+n);
+  const ic=document.getElementById('vi'+n);
+  const dt=document.getElementById('vd'+n);
+  if(!el) return;
+  el.className='pstep '+status;
+  if(status==='active') ic.innerHTML='<span class="spin"></span>';
+  else if(status==='done')  ic.textContent='✓';
+  else if(status==='error') ic.textContent='✗';
+  else ic.textContent=defVIco[n];
+  if(detail!==undefined) dt.textContent=detail;
+}
+
+// ── STEPS ────────────────────────────────────────────────────
+const defIco={1:'🔍',2:'🎨',3:'🖼️',4:'✍️'};
+function setStep(n,status,detail){
+  const el=document.getElementById('s'+n),ic=document.getElementById('i'+n),dt=document.getElementById('d'+n);
+  el.className='pstep '+status;
+  if(status==='active')ic.innerHTML='<span class="spin"></span>';
+  else if(status==='done')ic.textContent='✓';
+  else if(status==='error')ic.textContent='✗';
+  else ic.textContent=defIco[n];
+  if(detail!==undefined)dt.textContent=detail;
+}
+function showErr(msg){const b=document.getElementById('errBar');b.innerHTML='<strong>Error:</strong> '+msg;b.classList.add('show');}
+function hideErr(){document.getElementById('errBar').classList.remove('show');}
+
+function showAnalysis(d){
+  const a=d.analysis;
+  document.getElementById('agrid').innerHTML=[['Sujeto',a.subject],['Estilo',a.style],['Mood',a.mood],['Ilum.',a.lighting]].map(([k,v])=>'<div class="aitem"><div class="ak">'+k+'</div><div class="av">'+(v||'—')+'</div></div>').join('');
+  document.getElementById('aprompt').innerHTML='<strong>Prompt →</strong> '+(d.background_prompt||'').slice(0,180)+'…';
+  document.getElementById('abox').classList.add('show');
+}
+
+function swTab(n){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',['img','copy'][i]===n));
+  document.getElementById('tp-img').classList.toggle('on',n==='img');
+  document.getElementById('tp-copy').classList.toggle('on',n==='copy');
+}
+
+// ── CANVAS FINAL ─────────────────────────────────────────────
+async function composeCanvas(bgUrl, agent, ctas, network, zonasProd, activePhotos){
+  const dims = DIMS[network] || DIMS.feed_1x1;
+  const canvas = document.getElementById('outputCanvas');
+  canvas.width=dims.w; canvas.height=dims.h;
+  canvas.style.width='100%'; canvas.style.height='auto';
+  const ctx=canvas.getContext('2d'), W=canvas.width, H=canvas.height;
+
+  return new Promise(async(resolve,reject)=>{
+    const bgImg=new Image(); bgImg.crossOrigin='anonymous';
+    bgImg.onload=async()=>{
+      ctx.drawImage(bgImg,0,0,W,H);
+
+      // Zonas de producto — pegar foto recortada si hay zona marcada
+      if(zonasProd && activePhotos){
+        for(let i=0; i<3; i++){
+          const zona = zonasProd[i];
+          const fotoData = activePhotos[i];
+          if(!zona || !fotoData) continue;
+          try {
+            const cleanSrc = await removeBackground(fotoData.src);
+            await new Promise(res=>{
+              const pi=new Image();
+              pi.onload=()=>{
+                const px=zona.x*W, py=zona.y*H, pw=zona.w*W, ph=zona.h*H;
+                ctx.save();
+                ctx.shadowColor='rgba(0,0,0,0.4)';
+                ctx.shadowBlur=24; ctx.shadowOffsetY=10;
+                const rat=pi.naturalWidth/pi.naturalHeight;
+                let dw=pw, dh=pw/rat;
+                if(dh>ph){dh=ph; dw=ph*rat;}
+                const dx=px+(pw-dw)/2, dy=py+(ph-dh)/2;
+                ctx.drawImage(pi,dx,dy,dw,dh);
+                ctx.restore();
+                res();
+              };
+              pi.onerror=res; pi.src=cleanSrc;
+            });
+          } catch(e){ console.warn('Error zona prod'+(i+1)+':', e); }
+        }
+      }
+
+      const finish=()=>resolve();
+
+      // Logo con detección de brillo e inversión
+      if(logoSrc){
+        const li=new Image();
+        li.onload=()=>{
+          const zonaLogo = zones.find(z=>z.type==='logo');
+          let lx, ly, lW, lH;
+          if(zonaLogo){
+            lx=zonaLogo.x*W; ly=zonaLogo.y*H; lW=zonaLogo.w*W; lH=zonaLogo.h*H;
+            const rat=li.naturalWidth/li.naturalHeight;
+            let dw=lW, dh=lW/rat;
+            if(dh>lH){dh=lH; dw=lH*rat;}
+            lx=lx+(lW-dw)/2; ly=ly+(lH-dh)/2; lW=dw; lH=dh;
+          } else {
+            const lp=agent?.logo_position||agentResult?.logo_position||'top-right';
+            const pad=W*.04; lW=W*.18; lH=lW*(li.naturalHeight/li.naturalWidth);
+            lx=pad; ly=pad;
+            if(lp.includes('right'))  lx=W-lW-pad;
+            if(lp.includes('bottom')) ly=H-lH-pad;
+            if(lp.includes('center')) lx=(W-lW)/2;
+          }
+          // Detectar brillo
+          let fondoOscuro=false;
+          try {
+            const sx=Math.max(0,Math.round(lx)), sy=Math.max(0,Math.round(ly));
+            const sw=Math.min(Math.round(lW),W-sx), sh=Math.min(Math.round(lH),H-sy);
+            if(sw>0&&sh>0){
+              const px=ctx.getImageData(sx,sy,sw,sh).data;
+              let tot=0,cnt=0;
+              for(let i=0;i<px.length;i+=16){tot+=(px[i]*.299+px[i+1]*.587+px[i+2]*.114);cnt++;}
+              fondoOscuro=(tot/cnt)<128;
+            }
+          } catch(e){}
+          if(fondoOscuro){
+            const oc=document.createElement('canvas');
+            oc.width=Math.round(lW); oc.height=Math.round(lH);
+            const oc2=oc.getContext('2d');
+            oc2.drawImage(li,0,0,oc.width,oc.height);
+            const id=oc2.getImageData(0,0,oc.width,oc.height), d=id.data;
+            for(let i=0;i<d.length;i+=4){if(d[i+3]>20){d[i]=255-d[i];d[i+1]=255-d[i+1];d[i+2]=255-d[i+2];}}
+            oc2.putImageData(id,0,0);
+            ctx.globalAlpha=.95; ctx.drawImage(oc,lx,ly,lW,lH); ctx.globalAlpha=1;
+          } else {
+            ctx.globalAlpha=.95; ctx.drawImage(li,lx,ly,lW,lH); ctx.globalAlpha=1;
+          }
+          finish();
+        };
+        li.onerror=finish; li.src=logoSrc;
+      } else finish();
+    };
+    bgImg.onerror=()=>reject(new Error('No se pudo cargar la imagen de FLUX.'));
+    bgImg.src=bgUrl;
+  });
+}
+function renderCopy(d){
+  const items=[{l:'Hook',v:d.hook},{l:'Caption',v:d.caption},{l:'CTA recomendado',v:d.cta_recomendado},{l:'Hashtags',v:d.hashtags&&d.hashtags.length?'#'+d.hashtags.join(' #'):null},{l:'Variacion B',v:d.variacion_b}].filter(i=>i.v);
+  document.getElementById('copyBlocks').innerHTML=items.map((item,i)=>'<div class="cblock"><div class="cblabel">'+item.l+'</div><div class="cbtext" id="ct'+i+'">'+item.v+'</div><button class="cpbtn" onclick="doCopy(this,\'ct'+i+'\')">Copiar</button></div>').join('')+(d.tip?'<div class="tipblock"><span>💡</span><span>'+d.tip+'</span></div>':'');
+}
+function doCopy(btn,id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{btn.textContent='✓';btn.classList.add('ok');setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('ok');},2000);});}
+function dlCanvas(){const c=document.getElementById('outputCanvas');const a=document.createElement('a');a.download=slug+'-'+selNetwork+'.jpg';a.href=c.toDataURL('image/jpeg',.95);a.click();}
+
+async function poll(id){
+  for(let i=0;i<80;i++){
+    await new Promise(r=>setTimeout(r,2500));
+    const res=await fetch('/api/poll/'+id);const data=await res.json();
+    setStep(2,'active','procesando... '+((i+1)*2.5).toFixed(0)+'s');
+    if(data.status==='succeeded')return data;
+    if(data.status==='failed')throw new Error(data.error||'El modelo fallo');
+  }
+  throw new Error('Tiempo de espera agotado');
+}
+
+// ── PIPELINE ─────────────────────────────────────────────────
+// ── FORMATO DE DESCARGA ──────────────────────────────────────
+function setFmt(fmt){
+  dlFormat=fmt;
+  const j=document.getElementById('fmtJpg'), p=document.getElementById('fmtPng');
+  if(fmt==='jpg'){
+    j.style.background='var(--brand)'; j.style.color='var(--brand-btn-text)';
+    p.style.background='transparent';  p.style.color='var(--muted)';
+  } else {
+    p.style.background='var(--brand)'; p.style.color='var(--brand-btn-text)';
+    j.style.background='transparent';  j.style.color='var(--muted)';
+  }
+}
+
+function genFileName(suffix){
+  const titulo = document.getElementById('cta1').value.trim();
+  const boton  = document.getElementById('cta3').value.trim();
+  const base   = [slug, titulo||boton, suffix||selNetwork]
+    .filter(Boolean).join('-')
+    .toLowerCase()
+    .replace(/[áéíóú]/g,c=>({á:'a',é:'e',í:'i',ó:'o',ú:'u'}[c]||c))
+    .replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').slice(0,50);
+  const ts = Date.now().toString().slice(-4);
+  return base + '-' + ts;
+}
+
+function dlCanvas(which){
+  const c = which==='45'
+    ? document.getElementById('outputCanvas45')
+    : document.getElementById('outputCanvas');
+  const a = document.createElement('a');
+  const suffix = which==='45' ? selNetwork+'-45' : selNetwork;
+  a.download = genFileName(suffix) + '.' + dlFormat;
+  a.href = dlFormat==='png' ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', .95);
+  a.click();
+}
+
+// ── RESET / REGENERAR ────────────────────────────────────────
+function nuevaPieza(){
+  photos=[null,null,null,null,null];
+  logo=null; logoSrc=null;
+  refImg=null; refSrc=null;
+  zones=[]; renderZones(); updateSummary();
+
+  ['cta1','cta2','cta3','userPrompt'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+
+  // Reset zonas de fotos
+  for(let i=0;i<5;i++) clearPhotoZone({stopPropagation:()=>{}}, i);
+
+  // Reset logo y ref
+  const lz=document.getElementById('logoZone');
+  if(lz){lz.classList.remove('filled');lz.innerHTML='<input type="file" id="logoInput" accept="image/*" onchange="handleUpload(event,\'logo\')"><span class="upico">🏷️</span><div class="uphint"><strong>Subir logo</strong><br><span style="font-size:11px">PNG recomendado</span></div>';lz.onclick=()=>document.getElementById('logoInput').click();}
+  clearRefZone({stopPropagation:()=>{}});
+
+  document.getElementById('result').style.display='none';
+  document.getElementById('emptyState').style.display='block';
+  document.getElementById('abox').classList.remove('show');
+  document.getElementById('pipeline').classList.remove('show');
+  hideErr();
+  lastPayload=null; lastAgent=null;
+}
+
+async function regenerar(){
+  if(!photo){ alert('No hay foto cargada para regenerar.'); return; }
+  // Corre el pipeline completo desde cero — nuevo análisis de Claude + nueva imagen de FLUX
+  runPipeline();
+}
+
+// ── REMOCIÓN DE FONDO (para zona Producto) ──────────────────
+function removeBackground(imgSrc){
+  return new Promise(resolve=>{
+    const img=new Image();
+    img.onload=()=>{
+      const c=document.createElement('canvas');
+      c.width=img.naturalWidth; c.height=img.naturalHeight;
+      const ctx=c.getContext('2d'); ctx.drawImage(img,0,0);
+      const data=ctx.getImageData(0,0,c.width,c.height), d=data.data;
+      const corners=[[0,0],[c.width-1,0],[0,c.height-1],[c.width-1,c.height-1]].map(([x,y])=>{
+        const i=(y*c.width+x)*4; return [d[i],d[i+1],d[i+2]];
+      });
+      const bgR=Math.round(corners.reduce((a,c)=>a+c[0],0)/4);
+      const bgG=Math.round(corners.reduce((a,c)=>a+c[1],0)/4);
+      const bgB=Math.round(corners.reduce((a,c)=>a+c[2],0)/4);
+      const brightness=(bgR+bgG+bgB)/3;
+      const tol=brightness>200?65:brightness>150?45:30;
+      for(let i=0;i<d.length;i+=4){
+        const dist=Math.sqrt((d[i]-bgR)**2+(d[i+1]-bgG)**2+(d[i+2]-bgB)**2);
+        if(dist<tol) d[i+3]=dist<tol*.5?0:Math.round(((dist-tol*.5)/(tol*.5))*255);
+      }
+      ctx.putImageData(data,0,0);
+      resolve(c.toDataURL('image/png'));
+    };
+    img.onerror=()=>resolve(imgSrc);
+    img.src=imgSrc;
+  });
+}
+
+async function renderCopyAndFinish(agent, ctas, network){
+  setStep(4,'active','generando copy...');
+  const r3=await fetch('/api/generate-copy',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({slug,imageBase64:photo,imageMediaType:photoMime,analysis:agent.analysis,ctas,network})});
+  const copyData=await r3.json();
+  if(!r3.ok) throw new Error(copyData.error||'Error copy');
+  setStep(4,'done','copy listo');
+  renderCopy(copyData);
+  document.getElementById('result').style.display='block'; swTab('img');
+}
+
+async function generarDesdeAgent(agent, ctas, network, activePhotos){
+  activePhotos = activePhotos || photos.filter(Boolean);
+  setStep(2,'active','FLUX.2 Pro generando pieza' + (activePhotos.length>1?' con '+activePhotos.length+' productos':'') + '...');
+
+  const aspectRatio = ASPECT_RATIOS_NET[network] || '1:1';
+
+  // Pasar todas las fotos activas a FLUX como input_images
+  const pred = await fetch('/api/generate-image',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      prompt: agent.background_prompt,
+      negative_prompt: agent.negative_prompt,
+      aspect_ratio: aspectRatio,
+      imageBase64: getPhoto(),
+      imageMediaType: getPhotoMime(),
+      extraPhotos: activePhotos.slice(1).map(p=>({data:p.data, mime:p.mime})),
+    })}).then(r=>r.json());
+
+  if(pred.error) throw new Error(pred.error);
+
+  let imageUrl;
+  if(pred.status==='succeeded'){
+    imageUrl = Array.isArray(pred.output)?pred.output[0]:pred.output;
+  } else {
+    const done = await poll(pred.id);
+    imageUrl = Array.isArray(done.output)?done.output[0]:done.output;
+  }
+
+  if(!imageUrl) throw new Error('Replicate no devolvio imagen.');
+  setStep(2,'done','pieza generada');
+
+  setStep(3,'active','finalizando...');
+
+  // Zonas de producto vinculadas a fotos
+  const zonasProd = [
+    zones.find(z=>z.type==='prod1'),
+    zones.find(z=>z.type==='prod2'),
+    zones.find(z=>z.type==='prod3'),
+  ];
+
+  await composeCanvas(imageUrl, agent, ctas, network, zonasProd, activePhotos);
+  setStep(3,'done','pieza lista');
+
+  await renderCopyAndFinish(agent, ctas, network);
+}
+
+async function runPipeline(){
+  if(!getPhoto()){alert('Subi al menos la foto principal.');return;}
+  const ctas=[1,2,3].map(n=>document.getElementById('cta'+n).value.trim()).filter(Boolean);
+  if(!ctas.length){alert('Ingresa al menos un CTA.');return;}
+  const userPrompt = document.getElementById('userPrompt').value.trim();
+  const zonesText  = zonesToInstructions();
+  const brief      = getBrief();
+
+  // Fotos activas (sin nulls)
+  const activePhotos = photos.filter(Boolean);
+  const multiPhoto   = activePhotos.length > 1;
+
+  const btn=document.getElementById('genBtn');
+  btn.disabled=true; document.getElementById('btnTxt').textContent='Procesando...';
+  document.getElementById('emptyState').style.display='none';
+  document.getElementById('result').style.display='none';
+  document.getElementById('abox').classList.remove('show');
+  document.getElementById('pipeline').classList.add('show');
+  document.getElementById('videoPipeline').classList.remove('show');
+  hideErr(); [1,2,3,4].forEach(n=>setStep(n,'',''));
+
+  try{
+    setStep(1,'active', refImg
+      ? 'analizando fotos + referencia...'
+      : multiPhoto
+        ? 'analizando '+activePhotos.length+' productos...'
+        : 'analizando con criterio de marca...');
+
+    // Construir payload — foto principal + extras opcionales
+    const payload={
+      slug,
+      imageBase64:   getPhoto(),
+      imageMediaType: getPhotoMime(),
+      logoBase64:    logo,
+      logoMediaType: logoMime,
+      ctas,
+      userPrompt: userPrompt + zonesText + brief,
+      network: selNetwork,
+      extraPhotos: activePhotos.slice(1).map(p=>({data:p.data, mime:p.mime})),
+    };
+    if(refImg){ payload.refImageBase64=refImg; payload.refImageMediaType=refMime; }
+
+    const r1=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const agent=await r1.json();
+    if(!r1.ok) throw new Error(agent.error||'Error en el agente');
+    agentResult=agent;
+    lastAgent=agent; lastPayload={ctas, network:selNetwork};
+    setStep(1,'done','Estilo: '+(agent.analysis&&agent.analysis.style||'—')); showAnalysis(agent);
+
+    await generarDesdeAgent(agent, ctas, selNetwork, activePhotos);
+
+  }catch(err){
+    showErr(err.message);
+    [1,2,3,4].forEach(n=>{if(document.getElementById('s'+n).classList.contains('active'))setStep(n,'error');});
+    document.getElementById('emptyState').style.display='block';
+  }finally{
+    btn.disabled=false; document.getElementById('btnTxt').textContent='Generar pieza + copy';
+  }
+}
+
+// ── GENERAR VIDEO ─────────────────────────────────────────────
+let currentVideoUrl = null;
+
+async function generarVideo(){
+  const canvas = document.getElementById('outputCanvas');
+  if(!canvas.width){ alert('Primero genera una pieza.'); return; }
+
+  const btn = document.getElementById('videoBtn');
+  const btnTxt = document.getElementById('videoBtnTxt');
+  btn.disabled = true; btnTxt.textContent = 'Generando video...';
+  document.getElementById('videoResult').style.display = 'none';
+  document.getElementById('videoPipeline').classList.add('show');
+  [1,2,3,4].forEach(n=>setVideoStep(n,'',''));
+
+  try {
+    // Paso 1: Claude genera prompt de movimiento según el contenido
+    setVideoStep(1,'active','analizando composición...');
+    const analysis = agentResult?.analysis || {};
+    const compNote = agentResult?.composition_note || '';
+    const hasPersona = ['mujer','hombre','persona','model','woman','man','person','legs','piernas']
+      .some(w => (analysis.subject||'').toLowerCase().includes(w) || compNote.toLowerCase().includes(w));
+
+    let videoPrompt;
+    if(hasPersona){
+      videoPrompt = compNote +
+        '. Natural human movement: legs walking with confident stride, slight body sway, ' +
+        'boots in motion showing natural gait, hair moving subtly. ' +
+        'Slow motion cinematic capture, 120fps feel, shallow depth of field. ' +
+        'Camera slowly pulls back to reveal full scene. ' +
+        'Professional fashion commercial, smooth stabilized footage.';
+    } else {
+      videoPrompt = compNote +
+        '. Product showcase movement: slow 360 degree rotation around the product, ' +
+        'subtle light reflections moving across the leather surface, ' +
+        'gentle camera drift revealing product details. ' +
+        'Cinematic product reveal, dramatic lighting shift, professional commercial quality.';
+    }
+    setVideoStep(1,'done', hasPersona ? 'movimiento humano detectado' : 'showcase de producto');
+
+    // Paso 2: subir imagen
+    setVideoStep(2,'active','subiendo imagen...');
+    const imageData = canvas.toDataURL('image/jpeg', .95).split(',')[1];
+    const res = await fetch('/api/generate-video', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ imageBase64: imageData, prompt: videoPrompt, duration: 5 })
+    });
+    const pred = await res.json();
+    if(!res.ok) throw new Error(pred.error || 'Error generando video');
+    setVideoStep(2,'done','imagen subida');
+
+    // Paso 3: polling Kling
+    setVideoStep(3,'active','animando...');
+    let videoUrl = null;
+    for(let i=0; i<120; i++){
+      await new Promise(r=>setTimeout(r,3000));
+      const pd = await fetch('/api/poll-video/' + pred.id);
+      const pdata = await pd.json();
+      setVideoStep(3,'active', 'Kling animando... ' + ((i+1)*3) + 's');
+      if(pdata.status==='succeeded'){
+        videoUrl = Array.isArray(pdata.output) ? pdata.output[0] : pdata.output;
+        break;
+      }
+      if(pdata.status==='failed') throw new Error(pdata.error||'El modelo de video fallo');
+    }
+    if(!videoUrl) throw new Error('Tiempo de espera agotado');
+
+    setVideoStep(3,'done','animación completada');
+    setVideoStep(4,'done','video listo ✓');
+
+    currentVideoUrl = videoUrl;
+    document.getElementById('videoPlayer').src = videoUrl;
+    document.getElementById('videoResult').style.display = 'block';
+    btnTxt.textContent = 'Animar pieza — Generar video';
+
+  } catch(err) {
+    [1,2,3,4].forEach(n=>{if(document.getElementById('v'+n)?.classList.contains('active'))setVideoStep(n,'error');});
+    alert('Error: ' + err.message);
+    btnTxt.textContent = 'Animar pieza — Generar video';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function dlVideo(){
+  if(!currentVideoUrl){ alert('No hay video disponible.'); return; }
+  try {
+    const res = await fetch(currentVideoUrl);
+    const blob = await res.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = genFileName(selNetwork) + '.mp4';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  } catch(e) { window.open(currentVideoUrl, '_blank'); }
+}
+</script>
+</body>
+</html>
