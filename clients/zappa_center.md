@@ -1,6 +1,6 @@
 # Cliente: Zappa Center
 
-**Nombre**: Zappa Center  
+**Nombre**: Zappa_Center  
 **Rubro**: Calzado — Ecommerce de venta de calzado para mujer, hombre y niños  
 **Web**: https://zappacenter.com.ar  
 **Slogan**: Calzado para todos los días  
