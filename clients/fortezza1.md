@@ -1,6 +1,6 @@
 # Cliente: Fortezza Gas
 
-**Nombre**: Fortezza Gas  
+**Nombre**: Fortezza-Gas  
 **Rubro**: Equipamiento e instalación de GNC vehicular  
 **Web**: https://fortezzagas.com/  
 **Slogan**: Convertí tu auto en ahorro  
