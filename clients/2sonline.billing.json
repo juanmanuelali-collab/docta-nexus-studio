@@ -1,0 +1,13 @@
+{
+  "slug": "2sonline",
+  "plan_limit": 30,
+  "price_per_graphic": { "ars": 3500, "usd": 3.0, "eur": 2.7 },
+  "currency_display": "ars",
+  "active": true,
+  "usage": {
+    "total_graphics": 0,
+    "calls": { "claude_analysis": 0, "flux_image": 0, "claude_copy": 0 },
+    "total_cost_usd": 0,
+    "history": []
+  }
+}
