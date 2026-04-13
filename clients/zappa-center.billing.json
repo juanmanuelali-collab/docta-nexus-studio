@@ -1,12 +1,10 @@
 {
-  "slug": "2sonline",
+  "slug": "zappa-center",
   "plan_monthly": 30,
   "pricing_mode": "markup",
   "markup": 4,
   "fixed_price": {
-    "ars": 3000,
-    "usd": 2.5,
-    "eur": 2.3
+    "ars": 10000,
   },
   "currency_display": "ars",
   "active": true,
