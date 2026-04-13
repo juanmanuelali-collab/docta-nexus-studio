@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Docta Nexus Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0b0d;--s1:#151518;--s2:#1e1e22;--s3:#27272c;--border:#2c2c32;--border2:#3a3a42;--text:#f0f1f3;--muted:#8a8a98;--brand:#c8f135;--brand2:#b8e020;--brand-btn:#0a0a0b;--danger:#f26d6d;--success:#5de8a0;--amber:#f5a623;--r:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;min-height:100vh}
+.hdr{background:var(--s1);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.hdr h1{font-size:1.2rem;font-weight:700}
+.hdr span{font-size:12px;color:var(--muted)}
+.wrap{max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+.login-box{max-width:380px;margin:5rem auto;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:2rem}
+.login-box h2{font-size:1.3rem;font-weight:700;margin-bottom:1.5rem;text-align:center}
+input{width:100%;background:var(--s2);border:1.5px solid var(--border2);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;padding:12px 14px;outline:none;margin-bottom:1rem}
+input:focus{border-color:var(--brand)}
+.btn{width:100%;background:var(--brand);color:var(--brand-btn);border:none;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;padding:13px;cursor:pointer;transition:all .2s}
+.btn:hover{background:var(--brand2)}
+.btn-sm{padding:7px 14px;font-size:13px;font-weight:700;width:auto;border-radius:7px}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-outline{background:transparent;border:1.5px solid var(--brand);color:var(--brand)}
+.btn-outline:hover{background:var(--brand);color:var(--brand-btn)}
+.section{margin-bottom:2rem}
+.section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem}
+.card-name{font-weight:700;font-size:1rem;margin-bottom:.3rem}
+.card-slug{font-size:12px;color:var(--muted);margin-bottom:1rem}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)}
+.stat-row:last-of-type{border-bottom:none}
+.stat-label{font-size:12px;color:var(--muted)}
+.stat-val{font-weight:700;font-size:14px}
+.ok{color:var(--success)}.warn{color:var(--amber)}.danger{color:var(--danger)}
+.prog-track{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;margin:8px 0}
+.prog-fill{height:100%;border-radius:3px;background:var(--brand);transition:width .3s}
+.prog-fill.warn{background:var(--amber)}.prog-fill.danger{background:var(--danger)}
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase}
+.badge-ok{background:rgba(93,232,160,.15);color:var(--success);border:1px solid rgba(93,232,160,.3)}
+.badge-off{background:rgba(242,109,109,.15);color:var(--danger);border:1px solid rgba(242,109,109,.3)}
+.edit-form{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);display:none;flex-direction:column;gap:8px}
+.edit-form.show{display:flex}
+.edit-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.edit-label{font-size:11px;color:var(--muted);margin-bottom:3px;font-weight:600;text-transform:uppercase}
+.edit-input{width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:7px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 10px;outline:none;margin:0}
+.edit-input:focus{border-color:var(--brand)}
+.edit-btns{display:flex;gap:8px;margin-top:4px}
+.global-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1.5rem}
+.calls-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.chip{font-size:11px;background:var(--s2);border:1px solid var(--border2);border-radius:6px;padding:3px 10px;color:var(--muted)}
+.chip span{font-weight:700;color:var(--text)}
+.summary-bar{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem}
+.summary-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:1rem}
+.summary-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.summary-card .val{font-size:1.5rem;font-weight:800}
+.err{color:var(--danger);font-size:13px;text-align:center;padding:.5rem}
+select{width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:7px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 10px;outline:none;margin:0}
+select:focus{border-color:var(--brand)}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-box">
+    <h2>🔐 Admin Studio</h2>
+    <input type="password" id="pwdInput" placeholder="Contraseña admin" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn" onclick="doLogin()">Ingresar</button>
+    <div class="err" id="loginErr" style="display:none">Contraseña incorrecta</div>
+  </div>
+</div>
+
+<div id="adminScreen" style="display:none">
+  <div class="hdr">
+    <h1>⚡ Admin — Docta Nexus Studio</h1>
+    <span id="adminDate"></span>
+  </div>
+  <div class="wrap">
+
+    <!-- RESUMEN GLOBAL -->
+    <div class="section">
+      <div class="section-title">Resumen global</div>
+      <div class="summary-bar" id="summaryBar"></div>
+    </div>
+
+    <!-- CONFIG GLOBAL DE COSTOS -->
+    <div class="section">
+      <div class="section-title">Costos por llamada (USD)</div>
+      <div class="global-card">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:1rem">
+          <div>
+            <div class="edit-label">Claude Análisis (USD)</div>
+            <input class="edit-input" type="number" step="0.001" id="costAnalysis" placeholder="0.008">
+          </div>
+          <div>
+            <div class="edit-label">Flux Imagen (USD)</div>
+            <input class="edit-input" type="number" step="0.001" id="costFlux" placeholder="0.055">
+          </div>
+          <div>
+            <div class="edit-label">Claude Copy (USD)</div>
+            <input class="edit-input" type="number" step="0.001" id="costCopy" placeholder="0.004">
+          </div>
+          <div>
+            <div class="edit-label">USD → ARS</div>
+            <input class="edit-input" type="number" id="rateARS" placeholder="1200">
+          </div>
+          <div>
+            <div class="edit-label">USD → EUR</div>
+            <input class="edit-input" type="number" step="0.01" id="rateEUR" placeholder="0.92">
+          </div>
+          <div>
+            <div class="edit-label">Teléfono contacto</div>
+            <input class="edit-input" type="text" id="contactPhone" placeholder="351 6 886262">
+          </div>
+        </div>
+        <button class="btn btn-sm" onclick="saveGlobalConfig()">Guardar configuración global</button>
+        <span id="configSaved" style="display:none;color:var(--success);font-size:13px;margin-left:10px">✓ Guardado</span>
+      </div>
+    </div>
+
+    <!-- CLIENTES -->
+    <div class="section">
+      <div class="section-title">Clientes</div>
+      <div class="grid" id="clientsGrid"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let adminPwd = '';
+let globalData = null;
+document.getElementById('adminDate').textContent = new Date().toLocaleDateString('es-AR', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+async function doLogin(){
+  const pwd = document.getElementById('pwdInput').value;
+  const r = await fetch('/api/admin/billing?password=' + encodeURIComponent(pwd));
+  if(!r.ok){ document.getElementById('loginErr').style.display='block'; return; }
+  const d = await r.json();
+  adminPwd = pwd;
+  globalData = d;
+  document.getElementById('loginErr').style.display='none';
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('adminScreen').style.display='block';
+  renderAdmin(d);
+}
+
+function renderAdmin(d){
+  // Resumen global
+  const clients = d.clients || [];
+  const totalGraphics = clients.reduce((s,c)=>s+(c.total_graphics||0),0);
+  const totalCostUsd  = clients.reduce((s,c)=>s+(c.total_cost_usd||0),0);
+  const totalCostArs  = clients.reduce((s,c)=>s+(c.total_cost_ars||0),0);
+  const activeClients = clients.filter(c=>c.active).length;
+  document.getElementById('summaryBar').innerHTML = [
+    {l:'Clientes activos', v:activeClients+' / '+clients.length},
+    {l:'Gráficas totales', v:totalGraphics},
+    {l:'Costo total USD', v:'$'+totalCostUsd.toFixed(2)},
+    {l:'Costo total ARS', v:'$'+totalCostArs.toLocaleString('es-AR')},
+  ].map(x=>`<div class="summary-card"><div class="lbl">${x.l}</div><div class="val">${x.v}</div></div>`).join('');
+
+  // Config global
+  const cfg = d.costs_usd || {};
+  const rates = d.rates || {};
+  document.getElementById('costAnalysis').value = cfg.claude_analysis || '';
+  document.getElementById('costFlux').value = cfg.flux_image || '';
+  document.getElementById('costCopy').value = cfg.claude_copy || '';
+  document.getElementById('rateARS').value = rates.usd_to_ars || '';
+  document.getElementById('rateEUR').value = rates.usd_to_eur || '';
+
+  // Clientes
+  document.getElementById('clientsGrid').innerHTML = clients.map(c => renderClientCard(c)).join('');
+}
+
+function renderClientCard(c){
+  const pct = c.plan_limit > 0 ? Math.min(100,Math.round((c.total_graphics/c.plan_limit)*100)) : 0;
+  const level = pct>=90?'danger':pct>=70?'warn':'';
+  const curr = c.currency_display || 'usd';
+  const costMap = {usd:'$'+(c.total_cost_usd||0).toFixed(2)+' USD', ars:'$'+(c.total_cost_ars||0).toLocaleString('es-AR')+' ARS', eur:'€'+(c.total_cost_eur||0).toFixed(2)};
+  const ppgMap = {usd:'$'+(c.price_per_graphic?.usd||0)+' USD', ars:'$'+(c.price_per_graphic?.ars||0)+' ARS', eur:'€'+(c.price_per_graphic?.eur||0)};
+  return `<div class="card" id="card-${c.slug}">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div class="card-name">${c.name}</div>
+        <div class="card-slug">/${c.slug}</div>
+      </div>
+      <span class="badge ${c.active?'badge-ok':'badge-off'}">${c.active?'Activo':'Pausado'}</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill ${level}" style="width:${pct}%"></div></div>
+    <div class="stat-row"><span class="stat-label">Gráficas usadas</span><span class="stat-val ${level}">${c.total_graphics} / ${c.plan_limit||'∞'}</span></div>
+    <div class="stat-row"><span class="stat-label">Restantes</span><span class="stat-val">${c.remaining!==null?c.remaining:'∞'}</span></div>
+    <div class="stat-row"><span class="stat-label">Costo acumulado</span><span class="stat-val">${costMap[curr]||costMap.usd}</span></div>
+    <div class="stat-row"><span class="stat-label">Precio x gráfica</span><span class="stat-val">${ppgMap[curr]||ppgMap.usd}</span></div>
+    <div style="margin-top:8px">
+      <div class="edit-label">Llamadas</div>
+      <div class="calls-row">
+        <div class="chip">🤖 Análisis <span>${c.calls?.claude_analysis||0}</span></div>
+        <div class="chip">🖼️ Flux <span>${c.calls?.flux_image||0}</span></div>
+        <div class="chip">✍️ Copy <span>${c.calls?.claude_copy||0}</span></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:1rem">
+      <button class="btn btn-sm btn-outline" onclick="toggleEdit('${c.slug}')">Editar</button>
+      <button class="btn btn-sm btn-danger" onclick="resetUsage('${c.slug}','${c.name}')" style="background:rgba(242,109,109,.15);color:var(--danger);border:1px solid rgba(242,109,109,.3)">Reset uso</button>
+    </div>
+    <div class="edit-form" id="edit-${c.slug}">
+      <div class="edit-row">
+        <div>
+          <div class="edit-label">Límite gráficas</div>
+          <input class="edit-input" type="number" id="lim-${c.slug}" value="${c.plan_limit||50}">
+        </div>
+        <div>
+          <div class="edit-label">Moneda display</div>
+          <select id="curr-${c.slug}">
+            <option value="ars" ${curr==='ars'?'selected':''}>ARS</option>
+            <option value="usd" ${curr==='usd'?'selected':''}>USD</option>
+            <option value="eur" ${curr==='eur'?'selected':''}>EUR</option>
+          </select>
+        </div>
+        <div>
+          <div class="edit-label">Estado</div>
+          <select id="act-${c.slug}">
+            <option value="1" ${c.active?'selected':''}>Activo</option>
+            <option value="0" ${!c.active?'selected':''}>Pausado</option>
+          </select>
+        </div>
+      </div>
+      <div class="edit-label" style="margin-top:4px">Precio por gráfica</div>
+      <div class="edit-row">
+        <div>
+          <div class="edit-label">ARS</div>
+          <input class="edit-input" type="number" id="ppg-ars-${c.slug}" value="${c.price_per_graphic?.ars||0}">
+        </div>
+        <div>
+          <div class="edit-label">USD</div>
+          <input class="edit-input" type="number" step="0.01" id="ppg-usd-${c.slug}" value="${c.price_per_graphic?.usd||0}">
+        </div>
+        <div>
+          <div class="edit-label">EUR</div>
+          <input class="edit-input" type="number" step="0.01" id="ppg-eur-${c.slug}" value="${c.price_per_graphic?.eur||0}">
+        </div>
+      </div>
+      <div class="edit-btns">
+        <button class="btn btn-sm" onclick="saveClient('${c.slug}')">Guardar</button>
+        <button class="btn btn-sm btn-outline" onclick="toggleEdit('${c.slug}')">Cancelar</button>
+      </div>
+      <div id="saved-${c.slug}" style="display:none;color:var(--success);font-size:12px">✓ Guardado</div>
+    </div>
+  </div>`;
+}
+
+function toggleEdit(slug){
+  const el = document.getElementById('edit-'+slug);
+  el.classList.toggle('show');
+}
+
+async function saveClient(slug){
+  const body = {
+    password: adminPwd,
+    plan_limit: parseInt(document.getElementById('lim-'+slug).value) || 0,
+    currency_display: document.getElementById('curr-'+slug).value,
+    active: document.getElementById('act-'+slug).value === '1',
+    price_per_graphic: {
+      ars: parseFloat(document.getElementById('ppg-ars-'+slug).value) || 0,
+      usd: parseFloat(document.getElementById('ppg-usd-'+slug).value) || 0,
+      eur: parseFloat(document.getElementById('ppg-eur-'+slug).value) || 0,
+    }
+  };
+  const r = await fetch('/api/admin/billing/'+slug, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  if(r.ok){
+    document.getElementById('saved-'+slug).style.display='block';
+    setTimeout(()=>{document.getElementById('saved-'+slug).style.display='none'; refreshData();},1500);
+  }
+}
+
+async function resetUsage(slug, name){
+  if(!confirm('¿Resetear el uso de '+name+'? Esto borrará el historial de gráficas.')) return;
+  const r = await fetch('/api/admin/billing/'+slug, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({password:adminPwd, reset_usage:true})});
+  if(r.ok) refreshData();
+}
+
+async function saveGlobalConfig(){
+  const body = {
+    password: adminPwd,
+    costs_usd: {
+      claude_analysis: parseFloat(document.getElementById('costAnalysis').value)||0.008,
+      flux_image:      parseFloat(document.getElementById('costFlux').value)||0.055,
+      claude_copy:     parseFloat(document.getElementById('costCopy').value)||0.004,
+    },
+    usd_to_ars: parseFloat(document.getElementById('rateARS').value)||1200,
+    usd_to_eur: parseFloat(document.getElementById('rateEUR').value)||0.92,
+    contact_phone: document.getElementById('contactPhone').value||'351 6 886262',
+  };
+  const r = await fetch('/api/admin/config', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  if(r.ok){
+    document.getElementById('configSaved').style.display='inline';
+    setTimeout(()=>document.getElementById('configSaved').style.display='none',2000);
+  }
+}
+
+async function refreshData(){
+  const r = await fetch('/api/admin/billing?password='+encodeURIComponent(adminPwd));
+  if(r.ok){ globalData = await r.json(); renderAdmin(globalData); }
+}
+
+// Auto-refresh cada 30s
+setInterval(()=>{ if(adminPwd) refreshData(); }, 30000);
+</script>
+</body>
+</html>
