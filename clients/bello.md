@@ -1,106 +1,166 @@
-# Cliente: Asesores Brusa
+Cliente: Bello Export
+Nombre: Bello Export
+Rubro: Regalos empresariales, productos promocionales y merchandising corporativo
+Web: Bello Export
 
-**Nombre**: Asesores Brusa  
-**Rubro**: Productores asesores de seguros — Seguros individuales y empresariales  
-**Web**: https://asesoresbm.com.ar  
-**Instagram**: https://www.instagram.com/brusaseguros/  
-**Slogan**: Más de 40 años cuidando el patrimonio de los santacruceños
+Instagram: Instagram Bello Export
 
-## Paleta de colores
+Slogan sugerido: Diseño, calidad y experiencias que dejan marca
 
-Principal: #0f3b66  
-Acento: #2fa3dc  
-Texto sobre botones: #ffffff  
+Paleta de colores
+Principal: #1f1f1f
+Acento: #c89b5b
+Secundario: #f4f1eb
+Texto sobre botones: #ffffff
 
-## Identidad de marca
+Identidad de marca
+Bello Export es una empresa argentina especializada en regalos empresariales, merchandising corporativo y productos de diseño personalizados para empresas. Su propuesta combina estética premium, funcionalidad y personalización, orientada a marcas que buscan generar experiencias memorables a través de objetos de calidad.
 
-Asesores Brusa es una firma de seguros con fuerte presencia en Río Gallegos y Santa Cruz, orientada tanto a personas como a empresas. Su propuesta gira alrededor de la confianza, la trayectoria, el acompañamiento personalizado y la protección patrimonial.
+La marca transmite diseño, profesionalismo, exclusividad y valor percibido. No se posiciona como un proveedor genérico de merchandising, sino como un aliado estratégico para empresas que desean diferenciarse con regalos corporativos que representen su identidad.
 
-La marca transmite cercanía humana, respaldo profesional y experiencia real en seguros. No se posiciona como una aseguradora fría o impersonal, sino como un asesor de confianza que acompaña al cliente para elegir la cobertura correcta y resolver con claridad.
+Su universo de productos incluye:
 
-Su universo de servicios incluye seguros individuales como auto, moto, hogar, vida, accidentes personales, dispositivos electrónicos y viajes; y seguros para empresas como ART, flota automotor, cauciones, comercio, industria, consorcio, vida colectivo, seguro técnico y transporte de pasajeros.
+Regalos empresariales personalizados
+Merchandising corporativo
+Productos premium de madera y cocina
+Sets materos y accesorios
+Bolsos, mochilas y accesorios
+Productos ecofriendly
+Kits corporativos
+Objetos personalizados con logo
+Regalos institucionales y eventos empresariales
 
 El cliente tipo es:
-- Personas y familias que buscan proteger auto, hogar, vida o viajes
-- Comercios, pymes y empresas que necesitan respaldo técnico y coberturas patrimoniales
-- Público adulto, 28-65 años
-- Perfil que valora atención personalizada, confianza, rapidez de respuesta y respaldo real ante siniestros
 
-## Estilo visual y fondos
+Empresas y marcas que buscan regalos corporativos premium
+Áreas de marketing, RRHH y compras
+Pymes y grandes empresas
+Organizadores de eventos y acciones promocionales
+Negocios que priorizan imagen de marca y calidad percibida
+Público B2B, 28-60 años
 
-Los fondos deben transmitir seguridad, tranquilidad, respaldo y profesionalismo. La elección del fondo puede variar según el objetivo de la pieza:
+Estilo visual y fondos
+Los fondos deben transmitir diseño, sofisticación, calidad y branding corporativo.
 
-- FONDOS OSCUROS E INSTITUCIONALES (azul profundo, azul grisáceo, degradados sobrios): Para piezas de marca, trayectoria, confianza, respaldo y campañas corporativas.
-- FONDOS CLAROS Y LIMPIOS (blanco, gris muy suave, azul hielo): Para piezas informativas, beneficios, tips, coberturas o llamados a cotizar.
-- FONDOS HUMANOS / COTIDIANOS (familias, autos, hogares, comercios, asesores con clientes): Para transmitir cercanía, empatía y contexto real de uso.
-- FONDOS EMPRESARIALES / CORPORATIVOS (oficinas, industria, flota, documentación, licitaciones): Para seguros orientados a empresas, ART, cauciones o flotas.
-- FONDOS DE VIAJE O MOVILIDAD (ruta, auto, moto, aeropuerto, hogar protegido): Para piezas temáticas por vertical de seguro.
+FONDOS OSCUROS PREMIUM (negro, grafito, madera oscura, degradados elegantes):
+Para piezas institucionales, branding, campañas premium y productos destacados.
 
-La variedad de fondos es recomendable para testing creativo, pero siempre manteniendo una estética prolija, confiable y profesional.
+FONDOS CLAROS MINIMALISTAS (beige, blanco cálido, arena, gris suave):
+Para catálogos, beneficios, productos y comunicación corporativa limpia.
 
-## Compatibilidad con Meta Andromeda
+FONDOS HUMANOS / CORPORATIVOS (reuniones, oficinas, gifting empresarial, networking):
+Para mostrar experiencias reales y uso corporativo.
 
-Las piezas deben ser compatibles con el sistema de optimización creativa automática de Meta (Advantage+ / Andromeda):
-- Texto principal y elementos clave dentro de la zona central segura
-- Composición limpia y adaptable a formatos verticales, cuadrados y horizontales
-- Espacio visual suficiente para recortes automáticos
-- Alto contraste entre texto y fondo
-- CTA claros, visibles y sin superposición con los elementos principales de la imagen
+FONDOS DE PRODUCTO / LIFESTYLE (madera, cocina, escritorio, café, oficina premium):
+Para destacar materiales, terminaciones y percepción de calidad.
 
-## Paleta visual según fondo
+FONDOS ECOFRIENDLY / NATURALES (texturas naturales, madera, lino, verde suave):
+Para líneas sustentables y branding ecológico.
 
-- Fondo oscuro: textos en blanco o celeste claro
-- Fondo claro: textos en azul oscuro, gris profundo o negro
-- Fondo fotográfico: textos sobre banda sólida, bloque translúcido o área de baja interferencia visual
+La estética general debe sentirse:
 
-## Estilo tipográfico
+Premium
+Minimalista
+Moderna
+Elegante
+Corporativa
+Cálida
 
-- Títulos claros, firmes y de lectura rápida
-- Jerarquía marcada entre titular, beneficio y CTA
-- Copy breve, directo y confiable
-- Estética sobria: evitar exageraciones visuales o promociones agresivas
-- La tipografía debe transmitir profesionalismo, orden y cercanía
+Compatibilidad con Meta Andromeda
+Las piezas deben estar optimizadas para Meta Ads y Advantage+:
 
-## Recursos de marca frecuentes
+Elementos importantes dentro de zona segura central
+Composición adaptable a vertical, cuadrado y horizontal
+Alto contraste entre texto y fondo
+Productos visibles rápidamente
+Espacio limpio para recortes automáticos
+CTA claros y legibles
+Evitar exceso de texto
 
-- "MÁS DE 40 AÑOS CUIDANDO LO QUE MÁS IMPORTA"
-- "ASESORAMIENTO PERSONALIZADO"
-- "PROTEGÉ TU PATRIMONIO"
-- "COTIZÁ TU SEGURO"
-- "COBERTURAS PARA PERSONAS Y EMPRESAS"
-- "RESPALDO, EXPERIENCIA Y CONFIANZA"
-- "CONSULTÁ POR WHATSAPP"
-- "ASESORESBM.COM.AR"
+Paleta visual según fondo
+Fondo oscuro:
 
-## Tipos de piezas habituales
+Textos blancos
+Detalles dorados o beige premium
 
-1. INSTITUCIONAL / MARCA: trayectoria, confianza, respaldo, cercanía, equipo asesor
-2. COBERTURA INDIVIDUAL: auto, hogar, vida, viajes, accidentes personales
-3. COBERTURA EMPRESARIAL: ART, flota, caución, comercio, industria, consorcio
-4. EDUCATIVA / CONTENIDO: tips, prevención, preguntas frecuentes, conceptos de seguros
-5. CONVERSIÓN / COTIZACIÓN: piezas orientadas a generar consultas por WhatsApp o formularios
-6. TESTIMONIAL / HUMANO: asesores, clientes, situaciones cotidianas de protección y acompañamiento
+Fondo claro:
 
-## Instrucciones para el agente
+Textos negros o grafito
+Acentos cálidos y elegantes
 
-Al generar piezas para Asesores Brusa:
-- Priorizar una estética de confianza, cercanía y respaldo profesional
-- Evitar estilos estridentes, agresivos o demasiado promocionales
-- Cuando la pieza sea institucional, reforzar la trayectoria y el posicionamiento regional
-- Cuando la pieza sea de producto/servicio, dejar muy claro qué tipo de seguro se ofrece
-- Para seguros empresariales, usar recursos visuales más corporativos, sobrios y técnicos
-- Para seguros individuales, usar escenas humanas, familiares o cotidianas que transmitan tranquilidad
-- Mostrar protección, prevención y acompañamiento, no miedo extremo
-- Mantener siempre una composición limpia y lista para Meta Ads
-- Asegurar que logo, CTA y titular queden bien visibles en zona segura
-- El estilo general debe ser: CONFIABLE, PROFESIONAL, CERCANO y REGIONAL
+Fondo fotográfico:
 
-## Diferenciales que conviene reforzar en creatividad y copy
+Bloques translúcidos suaves
+Tipografía limpia y minimalista
 
-- Más de 40 años de trayectoria
-- Fuerte presencia en Río Gallegos y Santa Cruz
-- Asesoramiento personalizado
-- Atención cercana y humana
-- Coberturas para personas y empresas
-- Experiencia en seguros patrimoniales y empresariales
-- Respaldo de aseguradoras líderes
+Estilo tipográfico
+
+Tipografía moderna y premium
+Títulos fuertes pero elegantes
+Jerarquía clara entre producto, beneficio y CTA
+Estética minimalista y corporativa
+Copy breve, aspiracional y profesional
+
+Recursos de marca frecuentes
+“REGALOS EMPRESARIALES QUE DEJAN MARCA”
+“MERCHANDISING CORPORATIVO PREMIUM”
+“PERSONALIZÁ TU MARCA”
+“DISEÑO + CALIDAD + EXPERIENCIA”
+“PRODUCTOS CORPORATIVOS PERSONALIZADOS”
+“CALIDAD SUPERIOR Y STOCK PERMANENTE”
+“REGALOS EMPRESARIALES CON TU LOGO”
+“SOLUCIONES CORPORATIVAS PARA TU EMPRESA”
+“ASESORAMIENTO PERSONALIZADO”
+“BELLOEXPORT.COM.AR”
+
+Tipos de piezas habituales
+
+INSTITUCIONAL / MARCA
+Trayectoria, calidad, personalización, producción nacional y diseño.
+
+PRODUCTO / CATÁLOGO
+Tablas, kits, sets, bolsos, accesorios corporativos y merchandising.
+
+EMPRESARIAL / B2B
+Empresas regalando experiencias, branding corporativo, eventos y RRHH.
+
+ESTACIONAL / EVENTOS
+Fin de año, onboarding, aniversarios, ferias, acciones corporativas y campañas.
+
+ECOFRIENDLY
+Productos sustentables y líneas naturales para branding responsable.
+
+CONVERSIÓN / COTIZACIÓN
+Piezas orientadas a consultas por WhatsApp y presupuestos corporativos.
+
+LIFESTYLE / PREMIUM
+Escenas aspiracionales con productos en uso real.
+
+Instrucciones para el agente
+
+Al generar piezas para Bello Export:
+
+Priorizar diseño premium y percepción de calidad
+Mostrar productos como experiencias corporativas, no como merchandising barato
+Mantener una estética elegante y minimalista
+Destacar personalización y branding empresarial
+Reforzar calidad de materiales y terminaciones
+Mostrar objetos en contextos reales de uso
+Evitar visuales saturados o promociones agresivas
+Mantener composiciones limpias para Meta Ads
+Dar protagonismo visual al producto
+Reforzar exclusividad, branding y experiencia
+
+El estilo general debe ser:
+PREMIUM, CORPORATIVO, MODERNO, MINIMALISTA y ELEGANTE
+
+Diferenciales que conviene reforzar en creatividad y copy
+
+Más de 35 años de trayectoria
+Productos de diseño 100% argentino
+Regalos empresariales personalizados
+Calidad premium y stock permanente
+Personalización con láser, UV y serigrafía
+Producción y atención corporativa especializada
+Amplia variedad de productos empresariales
+Enfoque en branding y experiencia de marca
