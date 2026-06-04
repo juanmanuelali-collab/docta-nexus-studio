@@ -1,6 +1,5 @@
-# Cliente: MAFER Amoblamientos
-
-**Nombre:** MAFER Amoblamientos
+# Cliente: MAFER-Amoblamientos
+**Nombre:** MAFER-Amoblamientos
 **Rubro:** Fabricación de muebles a medida y amoblamientos integrales
 **Web:** [Completar]
 **Slogan:** Muebles diseñados para tu espacio
