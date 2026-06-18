@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Docta Nexus Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0b0d;--s1:#151518;--s2:#1e1e22;--s3:#27272c;--border:#2c2c32;--border2:#3a3a42;--text:#f0f1f3;--muted:#8a8a98;--brand:#c8f135;--brand2:#b8e020;--btntxt:#0a0a0b;--danger:#f26d6d;--success:#5de8a0;--amber:#f5a623;--teal:#3ecfaa;--r:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;min-height:100vh}
+.hdr{background:var(--s1);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.hdr h1{font-size:1.1rem;font-weight:800}
+.hdr-right{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:12px}
+.wrap{max-width:1300px;margin:0 auto;padding:2rem 1.5rem}
+
+/* LOGIN */
+.login-box{max-width:380px;margin:6rem auto;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:2rem}
+.login-box h2{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:1.5rem;text-align:center}
+input,select{background:var(--s2);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 13px;outline:none;width:100%;margin-bottom:.75rem}
+input:focus,select:focus{border-color:var(--brand)}
+.btn{background:var(--brand);color:var(--btntxt);border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;padding:11px 20px;cursor:pointer;transition:all .2s}
+.btn:hover{background:var(--brand2)}
+.btn-full{width:100%}
+.btn-sm{padding:7px 14px;font-size:13px}
+.btn-outline{background:transparent;border:1.5px solid var(--brand);color:var(--brand)}
+.btn-outline:hover{background:var(--brand);color:var(--btntxt)}
+.btn-danger{background:rgba(242,109,109,.12);border:1px solid rgba(242,109,109,.3);color:var(--danger)}
+.btn-danger:hover{background:var(--danger);color:#fff}
+.err{color:var(--danger);font-size:13px;text-align:center;margin-top:.5rem}
+
+/* LAYOUT */
+.section{margin-bottom:2.5rem}
+.section-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+
+/* SUMMARY */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin-bottom:1.5rem}
+.sum-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:1rem}
+.sum-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
+.sum-val{font-size:1.6rem;font-weight:800}
+
+/* CONFIG GLOBAL */
+.config-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1.5rem}
+.config-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:1rem}
+.flabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);display:block;margin-bottom:4px}
+.finput{margin:0;font-size:13px;padding:8px 11px}
+.config-note{font-size:12px;color:var(--muted);background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:1rem;line-height:1.7}
+.config-note strong{color:var(--amber)}
+
+/* CLIENTES */
+.clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:1.2rem}
+.client-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.client-head{padding:1rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.client-name{font-weight:700;font-size:1rem}
+.client-slug{font-size:12px;color:var(--muted)}
+.badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;text-transform:uppercase}
+.badge-ok{background:rgba(93,232,160,.12);color:var(--success);border:1px solid rgba(93,232,160,.25)}
+.badge-off{background:rgba(242,109,109,.12);color:var(--danger);border:1px solid rgba(242,109,109,.25)}
+.client-body{padding:1rem 1.2rem}
+
+/* MES ACTUAL */
+.month-box{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:.9rem 1rem;margin-bottom:.9rem}
+.month-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--brand);margin-bottom:.75rem}
+.month-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mstat{display:flex;flex-direction:column;gap:2px}
+.mstat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.mstat-val{font-weight:700;font-size:1.1rem}
+.prog-track{height:5px;background:var(--s3);border-radius:3px;margin-top:6px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;background:var(--brand)}
+.prog-fill.warn{background:var(--amber)}.prog-fill.danger{background:var(--danger)}
+
+/* COSTO REAL vs PRECIO */
+.cost-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)}
+.cost-row:last-child{border-bottom:none}
+.cost-lbl{font-size:12px;color:var(--muted)}
+.cost-val{font-size:13px;font-weight:700}
+.cost-real{color:var(--danger)}
+.cost-charged{color:var(--success)}
+.cost-margin{color:var(--brand)}
+
+/* LLAMADAS */
+.calls-chips{display:flex;gap:6px;flex-wrap:wrap;margin:.75rem 0}
+.chip{font-size:11px;background:var(--s3);border:1px solid var(--border2);border-radius:6px;padding:3px 9px;color:var(--muted)}
+.chip strong{color:var(--text)}
+
+/* HISTORIAL */
+.history-toggle{font-size:12px;color:var(--brand);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0;margin-bottom:.75rem;text-decoration:underline}
+.history-table{width:100%;border-collapse:collapse;font-size:12px;display:none}
+.history-table.show{display:table}
+.history-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:5px 8px;text-align:left;border-bottom:1px solid var(--border)}
+.history-table td{padding:6px 8px;border-bottom:1px solid var(--border);color:var(--text)}
+.history-table tr:last-child td{border-bottom:none}
+
+/* EDIT */
+.edit-panel{display:none;background:var(--s2);border-top:1px solid var(--border);padding:1rem 1.2rem}
+.edit-panel.show{display:block}
+.edit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:1rem}
+.edit-btns{display:flex;gap:8px;align-items:center}
+.saved-msg{font-size:12px;color:var(--success);display:none}
+.client-actions{display:flex;gap:8px;padding:.9rem 1.2rem;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div id="loginScreen">
+  <div class="login-box">
+    <h2>⚡ Admin Studio</h2>
+    <input type="password" id="pwdInput" placeholder="Contraseña admin" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn btn-full" onclick="doLogin()">Ingresar</button>
+    <div class="err" id="loginErr" style="display:none">Contraseña incorrecta</div>
+  </div>
+</div>
+
+<div id="adminScreen" style="display:none">
+  <div class="hdr">
+    <h1>⚡ Admin — Docta Nexus Studio</h1>
+    <div class="hdr-right">
+      <span id="adminDate"></span>
+      <button class="btn btn-sm btn-outline" onclick="refreshData()">↻ Actualizar</button>
+    </div>
+  </div>
+  <div class="wrap">
+
+    <div class="section">
+      <div class="section-title">Resumen global — mes actual</div>
+      <div class="summary-grid" id="summaryGrid"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Configuración global de costos</div>
+      <div class="config-card">
+        <div class="config-grid">
+          <div>
+            <label class="flabel">USD → ARS</label>
+            <input class="finput" type="number" id="rateARS" placeholder="1200">
+          </div>
+          <div>
+            <label class="flabel">USD → EUR</label>
+            <input class="finput" type="number" step="0.01" id="rateEUR" placeholder="0.92">
+          </div>
+          <div>
+            <label class="flabel">Teléfono contacto</label>
+            <input class="finput" type="text" id="contactPhone" placeholder="351 6 886262">
+          </div>
+          <div>
+            <label class="flabel">Admin password</label>
+            <input class="finput" type="password" id="newPwd" placeholder="Cambiar contraseña">
+          </div>
+        </div>
+        <div class="config-note">
+          <strong>Costos reales por llamada</strong> (tomados de las APIs en tiempo real):<br>
+          🤖 <strong>Claude Opus 4.5</strong>: $15/MTok input + $75/MTok output &nbsp;|&nbsp;
+          🤖 <strong>Claude Sonnet 4.5</strong>: $3/MTok input + $15/MTok output<br>
+          🖼️ <strong>Flux 2 Pro</strong>: ~$0.0032/segundo de GPU (~$0.048-0.096 por imagen)
+        </div>
+        <div style="margin-top:1rem;display:flex;align-items:center;gap:10px">
+          <button class="btn btn-sm" onclick="saveGlobalConfig()">Guardar</button>
+          <span id="configSaved" class="saved-msg">✓ Guardado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Clientes</div>
+      <div class="clients-grid" id="clientsGrid"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let adminPwd = '';
+let globalData = null;
+document.getElementById('adminDate').textContent = new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+async function doLogin(){
+  const pwd = document.getElementById('pwdInput').value;
+  const r = await fetch('/api/admin/billing?password='+encodeURIComponent(pwd));
+  if(!r.ok){ document.getElementById('loginErr').style.display='block'; return; }
+  const d = await r.json();
+  adminPwd = pwd; globalData = d;
+  document.getElementById('loginErr').style.display='none';
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('adminScreen').style.display='block';
+  renderAdmin(d);
+}
+
+function fmt(n,dec=2){ return n!=null ? n.toFixed(dec) : '0.00'; }
+function fmtARS(n){ return '$'+(n||0).toLocaleString('es-AR'); }
+function fmtUSD(n){ return '$'+fmt(n); }
+function fmtEUR(n){ return '€'+fmt(n); }
+
+function renderAdmin(d){
+  const clients = d.clients || [];
+  const rates = d.rates || {};
+
+  // Resumen global mes actual
+  const totGfx   = clients.reduce((s,c)=>s+(c.current_month?.graphics||0),0);
+  const totReal   = clients.reduce((s,c)=>s+(c.current_month?.real_cost_usd||0),0);
+  const totCharg  = clients.reduce((s,c)=>s+(c.current_month?.charged_usd||0),0);
+  const totMargin = totCharg - totReal;
+  document.getElementById('summaryGrid').innerHTML = [
+    {l:'Gráficas este mes', v:totGfx, c:'var(--text)'},
+    {l:'Costo real USD', v:fmtUSD(totReal), c:'var(--danger)'},
+    {l:'Facturado USD', v:fmtUSD(totCharg), c:'var(--success)'},
+    {l:'Margen USD', v:fmtUSD(totMargin), c:'var(--brand)'},
+    {l:'Costo real ARS', v:fmtARS(Math.round(totReal*(rates.usd_to_ars||1200))), c:'var(--danger)'},
+    {l:'Facturado ARS', v:fmtARS(Math.round(totCharg*(rates.usd_to_ars||1200))), c:'var(--success)'},
+  ].map(x=>`<div class="sum-card"><div class="sum-lbl">${x.l}</div><div class="sum-val" style="color:${x.c}">${x.v}</div></div>`).join('');
+
+  // Config global
+  document.getElementById('rateARS').value = rates.usd_to_ars || 1200;
+  document.getElementById('rateEUR').value = rates.usd_to_eur || 0.92;
+
+  // Clientes
+  document.getElementById('clientsGrid').innerHTML = clients.map(c => renderClient(c, rates)).join('');
+}
+
+function renderClient(c, rates){
+  const cm = c.current_month || {};
+  const limit = c.plan_monthly || 0;
+  const used  = cm.graphics || 0;
+  const pct   = limit > 0 ? Math.min(100, Math.round((used/limit)*100)) : 0;
+  const lvl   = pct>=90?'danger':pct>=70?'warn':'';
+  const rem   = limit > 0 ? Math.max(0, limit - used) : null;
+
+  const curr = c.currency_display || 'usd';
+  const realUsd  = cm.real_cost_usd || 0;
+  const chargedUsd = cm.charged_usd || 0;
+  const marginUsd  = chargedUsd - realUsd;
+
+  const fmtCurr = (usd) => curr==='ars' ? fmtARS(Math.round(usd*(rates.usd_to_ars||1200))) : curr==='eur' ? fmtEUR(usd*(rates.usd_to_eur||0.92)) : fmtUSD(usd);
+
+  // Modo de precio
+  const modeLabel = c.pricing_mode==='markup' ? `Markup ×${c.markup||1}` : c.pricing_mode==='fixed' ? 'Precio fijo' : 'Gratis';
+
+  // Historial
+  const hist = (c.history || []).slice().reverse();
+  const histRows = hist.length > 0 ? hist.map(m=>`
+    <tr>
+      <td>${m.month}</td>
+      <td>${m.graphics}</td>
+      <td class="cost-real">${fmtUSD(m.real_cost_usd||0)}</td>
+      <td class="cost-charged">${fmtCurr(m.charged_usd||0)}</td>
+      <td class="cost-margin">${fmtCurr((m.charged_usd||0)-(m.real_cost_usd||0))}</td>
+    </tr>`).join('') : '<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:.5rem">Sin historial previo</td></tr>';
+
+  return `<div class="client-card">
+    <div class="client-head">
+      <div>
+        <div class="client-name">${c.name}</div>
+        <div class="client-slug">/${c.slug} — ${modeLabel}</div>
+      </div>
+      <span class="badge ${c.active?'badge-ok':'badge-off'}">${c.active?'Activo':'Pausado'}</span>
+    </div>
+    <div class="client-body">
+
+      <!-- MES ACTUAL -->
+      <div class="month-box">
+        <div class="month-title">📅 ${cm.month || '—'}</div>
+        <div class="month-grid">
+          <div class="mstat"><span class="mstat-lbl">Gráficas</span><span class="mstat-val" style="color:${lvl==='danger'?'var(--danger)':lvl==='warn'?'var(--amber)':'var(--text)'}">${used} / ${limit||'∞'}</span></div>
+          <div class="mstat"><span class="mstat-lbl">Restantes</span><span class="mstat-val">${rem!==null?rem:'∞'}</span></div>
+        </div>
+        ${limit>0?`<div class="prog-track"><div class="prog-fill ${lvl}" style="width:${pct}%"></div></div>`:''}
+        <div class="calls-chips">
+          <div class="chip">🤖 Análisis <strong>${cm.calls?.claude_analysis||0}</strong></div>
+          <div class="chip">🖼️ Flux <strong>${cm.calls?.flux_image||0}</strong></div>
+          <div class="chip">✍️ Copy <strong>${cm.calls?.claude_copy||0}</strong></div>
+        </div>
+        <div class="cost-row"><span class="cost-lbl">Costo real (APIs)</span><span class="cost-val cost-real">${fmtUSD(realUsd)} USD</span></div>
+        <div class="cost-row"><span class="cost-lbl">Precio cobrado al cliente</span><span class="cost-val cost-charged">${fmtCurr(chargedUsd)}</span></div>
+        <div class="cost-row"><span class="cost-lbl">Tu margen</span><span class="cost-val cost-margin">${fmtCurr(marginUsd)}</span></div>
+      </div>
+
+      <!-- TOTALES HISTORICOS -->
+      <div style="margin-bottom:.75rem">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.5rem">Totales acumulados</div>
+        <div class="cost-row"><span class="cost-lbl">Total gráficas</span><span class="cost-val">${c.totals?.graphics||0}</span></div>
+        <div class="cost-row"><span class="cost-lbl">Costo real total</span><span class="cost-val cost-real">${fmtUSD(c.totals?.real_cost_usd||0)} USD</span></div>
+        <div class="cost-row"><span class="cost-lbl">Facturado total</span><span class="cost-val cost-charged">${fmtCurr(c.totals?.charged_usd||0)}</span></div>
+        <div class="cost-row"><span class="cost-lbl">Margen total</span><span class="cost-val cost-margin">${fmtCurr(c.totals?.margin_usd||0)}</span></div>
+      </div>
+
+      <!-- HISTORIAL -->
+      <button class="history-toggle" onclick="toggleHistory('${c.slug}')">Ver historial mensual ▾</button>
+      <table class="history-table" id="hist-${c.slug}">
+        <thead><tr><th>Mes</th><th>Gráficas</th><th>Costo real</th><th>Cobrado</th><th>Margen</th></tr></thead>
+        <tbody>${histRows}</tbody>
+      </table>
+
+    </div>
+
+    <!-- ACCIONES -->
+    <div class="client-actions">
+      <button class="btn btn-sm btn-outline" onclick="toggleEdit('${c.slug}')">✏️ Editar plan</button>
+      <button class="btn btn-sm btn-danger" onclick="resetMonth('${c.slug}','${c.name}')">↺ Reset mes</button>
+    </div>
+
+    <!-- EDIT -->
+    <div class="edit-panel" id="edit-${c.slug}">
+      <div class="edit-grid">
+        <div>
+          <label class="flabel">Gráficas/mes</label>
+          <input class="finput" type="number" id="lim-${c.slug}" value="${c.plan_monthly||30}">
+        </div>
+        <div>
+          <label class="flabel">Modo precio</label>
+          <select id="mode-${c.slug}">
+            <option value="markup" ${c.pricing_mode==='markup'?'selected':''}>Markup sobre costo real</option>
+            <option value="fixed"  ${c.pricing_mode==='fixed'?'selected':''}>Precio fijo por gráfica</option>
+            <option value="free"   ${c.pricing_mode==='free'?'selected':''}>Gratis</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">Markup (×)</label>
+          <input class="finput" type="number" step="0.5" id="mkp-${c.slug}" value="${c.markup||4}" placeholder="Ej: 4">
+        </div>
+        <div>
+          <label class="flabel">Precio fijo USD</label>
+          <input class="finput" type="number" step="0.1" id="fp-usd-${c.slug}" value="${c.fixed_price?.usd||0}">
+        </div>
+        <div>
+          <label class="flabel">Precio fijo ARS</label>
+          <input class="finput" type="number" id="fp-ars-${c.slug}" value="${c.fixed_price?.ars||0}">
+        </div>
+        <div>
+          <label class="flabel">Moneda display</label>
+          <select id="curr-${c.slug}">
+            <option value="ars" ${c.currency_display==='ars'?'selected':''}>ARS</option>
+            <option value="usd" ${c.currency_display==='usd'?'selected':''}>USD</option>
+            <option value="eur" ${c.currency_display==='eur'?'selected':''}>EUR</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">Estado</label>
+          <select id="act-${c.slug}">
+            <option value="1" ${c.active?'selected':''}>Activo</option>
+            <option value="0" ${!c.active?'selected':''}>Pausado</option>
+          </select>
+        </div>
+      </div>
+      <div class="edit-btns">
+        <button class="btn btn-sm" onclick="saveClient('${c.slug}')">Guardar</button>
+        <button class="btn btn-sm btn-outline" onclick="toggleEdit('${c.slug}')">Cancelar</button>
+        <span class="saved-msg" id="saved-${c.slug}">✓ Guardado</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function toggleHistory(slug){
+  const el = document.getElementById('hist-'+slug);
+  el.classList.toggle('show');
+}
+function toggleEdit(slug){
+  const el = document.getElementById('edit-'+slug);
+  el.classList.toggle('show');
+}
+
+async function saveClient(slug){
+  const body = {
+    password: adminPwd,
+    plan_monthly:    parseInt(document.getElementById('lim-'+slug).value)||0,
+    pricing_mode:    document.getElementById('mode-'+slug).value,
+    markup:          parseFloat(document.getElementById('mkp-'+slug).value)||1,
+    fixed_price:     { usd: parseFloat(document.getElementById('fp-usd-'+slug).value)||0, ars: parseFloat(document.getElementById('fp-ars-'+slug).value)||0 },
+    currency_display: document.getElementById('curr-'+slug).value,
+    active:          document.getElementById('act-'+slug).value === '1',
+  };
+  const r = await fetch('/api/admin/billing/'+slug,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(r.ok){
+    const el = document.getElementById('saved-'+slug);
+    el.style.display='inline';
+    setTimeout(()=>{el.style.display='none'; refreshData();},1500);
+  }
+}
+
+async function resetMonth(slug, name){
+  if(!confirm(`¿Archivar el mes actual de ${name} y empezar uno nuevo?\nEl historial quedará guardado.`)) return;
+  const r = await fetch('/api/admin/billing/'+slug,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:adminPwd,reset_month:true})});
+  if(r.ok) refreshData();
+}
+
+async function saveGlobalConfig(){
+  const body = {
+    password:      adminPwd,
+    usd_to_ars:    parseFloat(document.getElementById('rateARS').value)||1200,
+    usd_to_eur:    parseFloat(document.getElementById('rateEUR').value)||0.92,
+    contact_phone: document.getElementById('contactPhone').value,
+  };
+  const newPwd = document.getElementById('newPwd').value;
+  if(newPwd) body.admin_password = newPwd;
+  const r = await fetch('/api/admin/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(r.ok){
+    const el = document.getElementById('configSaved');
+    el.style.display='inline';
+    setTimeout(()=>el.style.display='none',2000);
+    if(newPwd){ adminPwd=newPwd; document.getElementById('newPwd').value=''; }
+  }
+}
+
+async function refreshData(){
+  const r = await fetch('/api/admin/billing?password='+encodeURIComponent(adminPwd));
+  if(r.ok){ globalData=await r.json(); renderAdmin(globalData); }
+}
+
+setInterval(()=>{ if(adminPwd) refreshData(); }, 30000);
+</script>
+</body>
+</html>
