@@ -75,3 +75,5 @@ Al generar piezas para 2S Online:
 - Respetar los colores de las marcas partner: ESAB (amarillo/negro), Bosch (azul/rojo), Einhell (rojo/negro)
 - El estilo es INDUSTRIAL PREMIUM: poderoso, tecnico, confiable
 - Asegurar siempre que los textos y el producto queden en la zona central segura
+- NO MODIFICAR NUNCA LOS Textos de la pieza — exactos e inmutables
+
